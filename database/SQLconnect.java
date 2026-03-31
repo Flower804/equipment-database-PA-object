@@ -1,4 +1,4 @@
-package VIEW;
+package database;
 
 import java.sql.*;
 
