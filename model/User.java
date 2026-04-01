@@ -16,7 +16,7 @@ public class User{
     email = this.email;
     type = this.type;
   }
-  
+   
   /*================getters============================*/
 
   public String get_name(){
@@ -71,4 +71,8 @@ public class User{
   }
 
   /*=====================user methods=============================*/
-}
+
+  privatete void get_user(SQLconnect db, String given_username){
+    db.
+  }
+} 

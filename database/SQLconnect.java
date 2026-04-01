@@ -80,5 +80,40 @@ public class SQLconnect {
     boolean result = do_match(username, password);
     return result;
   }
+  
+  private String get_user(String username){
+    Connection conn = get_connection();
+    Statement st = null;
+    ResultSet rs = null;
+    
+
+    String result = "";
+    try{
+
+      String query = " Select * from users where username = ?";
+      
+      st = conn.prepareStatement(query);
+      st.setString(1, username);
+
+      rs = st.executeQuery();
+
+      if(rs.next()){
+        String SQL_name = rs.getString("name");
+        String SQL_username = rs.getString("username");
+        String SQL_password = rs.getString("password");
+        boolean SQL_state = rs.getBoolean("state");
+        String SQL_email = rs.getString("email");
+        String SQL_type = rs.getString("type");
+      
+        //TODO: view if returning a User object isent just easier
+        result = SQL_name + ";" + SQL_username + ";" + SQL_password + ";" + SQL_state + ";" + SQL_email + ";" + SQL_type;
+      } else {
+        result = "User not found";
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return result;
+  }
 
 } 

@@ -11,7 +11,7 @@ public class main{
   static private Scanner input = new Scanner(System.in);
   static private SQLconnect db = new SQLconnect();
   
-  //static private User 
+  static private User user = new User("no name", "no username", "no password", false, "no email", "no type"); 
 
   public static void main(String[] args) {
     while(true){
@@ -63,6 +63,7 @@ public class main{
       match = db.get_match(username, password);
       if(match){
         System.out.println("user found");
+        user.get_user(db ,username);
         running = false;
       } else {
         System.out.println("no match found, please try again");
