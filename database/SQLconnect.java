@@ -93,7 +93,7 @@ public class SQLconnect {
     User result = null;
     try{
 
-      String query = " Select * from users where username = ?";
+      String query = " Select * from users where username = ?;";
       
       PreparedStatement st = conn.prepareStatement(query);
       st.setString(1, username);

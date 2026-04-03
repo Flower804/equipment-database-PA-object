@@ -11,12 +11,12 @@ public class User{
   protected String type;
 
   public User(String name, String username, String password, boolean state, String email, String type){
-    name = this.name;
-    username = this.username;
-    password = this.password;
-    state = this.state;
-    email = this.email;
-    type = this.type;
+    this.name = name;
+    this.username = username;
+    this.password = password;
+    this.state = state;
+    this.email = email;
+    this.type = type;
   }
    
   /*================getters============================*/
@@ -49,19 +49,19 @@ public class User{
 
   /*====================setters========================*/
   public void set_name(String name){
-    name = this.name;
+    this.name = name;
   }
 
   public void set_username(String username){
-    username = this.username;
+    this.username = username;
   }
 
   public void set_password(String password){
-    password = this.password;
+    this.password = password;
   }
 
   public void set_state(boolean state){
-    state = this.state;
+    this.state = state;
   }
 
   public void set_email(String email){
@@ -69,7 +69,7 @@ public class User{
   }
 
   public void set_type(String type){
-    type = this.type;
+    this.type = type;
   }
   
   public void set_user(SQLconnect db, String given_username){
