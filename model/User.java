@@ -1,5 +1,7 @@
 package model;
 
+import database.SQLconnect;
+
 public class User{
   protected String name;
   protected String username;
@@ -72,7 +74,18 @@ public class User{
 
   /*=====================user methods=============================*/
 
-  privatete void get_user(SQLconnect db, String given_username){
-    db.
+  private void get_user(SQLconnect db, String given_username){
+    User gotten_user = db.load_user(given_username);
+    
+    if(gotten_user != null){
+      set_name(gotten_user.get_name());
+      set_username(gotten_user.get_username());
+      set_password(gotten_user.get_password());
+      set_state(gotten_user.get_state());
+      set_email(gotten_user.get_email());
+      set_type(gotten_user.get_type());
+    } else {
+      System.out.println("An error has occured: There wasnt found an user");
+    }
   }
 } 

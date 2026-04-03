@@ -1,6 +1,7 @@
 package database;
 
 import java.sql.*;
+import model.User;
 
 public class SQLconnect {
 
@@ -81,18 +82,20 @@ public class SQLconnect {
     return result;
   }
   
-  private String get_user(String username){
-    Connection conn = get_connection();
-    Statement st = null;
-    ResultSet rs = null;
-    
+  public User load_user(String username){
+    return get_user(username);
+  }
 
-    String result = "";
+  private User get_user(String username){
+    Connection conn = get_connection();
+    ResultSet rs = null;
+
+    User result = null;
     try{
 
       String query = " Select * from users where username = ?";
       
-      st = conn.prepareStatement(query);
+      PreparedStatement st = conn.prepareStatement(query);
       st.setString(1, username);
 
       rs = st.executeQuery();
@@ -105,10 +108,10 @@ public class SQLconnect {
         String SQL_email = rs.getString("email");
         String SQL_type = rs.getString("type");
       
-        //TODO: view if returning a User object isent just easier
-        result = SQL_name + ";" + SQL_username + ";" + SQL_password + ";" + SQL_state + ";" + SQL_email + ";" + SQL_type;
-      } else {
-        result = "User not found";
+        //TOD: view if returning a User object isent just easier
+        //result = SQL_name + ";" + SQL_username + ";" + SQL_password + ";" + SQL_state + ";" + SQL_email + ";" + SQL_type;
+        User curr_user = new User(SQL_name, SQL_username, SQL_password, SQL_state, SQL_email, SQL_type);
+        result = curr_user;
       }
     } catch (SQLException e) {
       e.printStackTrace();
