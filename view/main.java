@@ -44,8 +44,9 @@ public class main{
   }
   
   private static void register(Scanner input){
-    System.out.println("");
+    user.register_user(db, input);
   }
+
   private static void login(Scanner input){
     String username = null;
     String password = null;
@@ -66,6 +67,7 @@ public class main{
         user.set_user(db ,username);
         running = false;
         System.out.println("bem-vindo " + user.get_username());
+        //TODO: in case of it being a Client or a Employee do extra load of their info
       } else {
         System.out.println("no match found, please try again");
       }
