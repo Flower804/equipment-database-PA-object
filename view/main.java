@@ -39,7 +39,7 @@ public class main{
   }
   
   private static void on_exit(){
-    System.out.println("finished");
+    System.out.println("Adeus " + user.get_username());
     System.exit(0);
   }
   
@@ -63,13 +63,17 @@ public class main{
       match = db.get_match(username, password);
       if(match){
         System.out.println("user found");
-        user.get_user(db ,username);
+        user.set_user(db ,username);
         running = false;
+        System.out.println("bem-vindo " + user.get_username());
       } else {
         System.out.println("no match found, please try again");
       }
     }
   }
+
+
+
 }
 
 

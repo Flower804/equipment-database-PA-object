@@ -71,6 +71,10 @@ public class User{
   public void set_type(String type){
     type = this.type;
   }
+  
+  public void set_user(SQLconnect db, String given_username){
+    get_user(db, given_username);
+  }
 
   /*=====================user methods=============================*/
 
