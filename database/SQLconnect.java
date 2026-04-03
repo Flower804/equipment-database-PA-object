@@ -25,14 +25,17 @@ public class SQLconnect {
   
   private boolean do_match(String username, String password){
     Connection conn = get_connection();
-    Statement st = null;
     ResultSet rs = null;
 
     try{
-      st = conn.createStatement();
+      String query = " Select * from users where username = ? and password = ?;";
+      
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setString(1, username);
+      st.setString(2, password);
+      
+      rs = st.executeQuery();
 
-      rs = st.executeQuery(" Select * from users where username = '" + username + "' and password = '" + password + "' ;");
-    
       if(rs.next() == true){
         return true; //it was found one row with this set 
       } else {
@@ -47,13 +50,16 @@ public class SQLconnect {
   //Maybe view if we can just change all of this to just state = !state or smth like that
   private boolean turn_offline(String username){
     Connection conn = get_connection();
-    Statement st = null;
     ResultSet rs = null;
 
     try{
-      st = conn.createStatement();
+      String query = " update users set state = 1 where username = ?;";
+      
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setString(1, username);
 
-      rs = st.executeQuery(" update users set state = 1 where username = '" + username + "';");
+      rs = st.executeQuery();
+
       return true;
     }catch(SQLException e){
       System.out.println("A SQLException has occured: " + e);
@@ -63,13 +69,16 @@ public class SQLconnect {
 
   private boolean turn_online(String username){
     Connection conn = get_connection();
-    Statement st = null;
     ResultSet rs = null;
 
     try{
-      st = conn.createStatement();
+      String query = " update users set state = 0 where username = ?;";
+      
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setString(1, username);
 
-      rs = st.executeQuery(" update users set state = 0 where username = '" + username + "';");
+      rs = st.executeQuery();
+
       return true;
     }catch(SQLException e){
       System.out.println("A SQLException has occured: " + e);
