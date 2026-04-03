@@ -1,6 +1,7 @@
 package model;
 
 import database.SQLconnect;
+import java.util.Scanner;
 
 public class User{
   protected String name;
@@ -99,49 +100,84 @@ public class User{
   }
 
   private void register(SQLconnect db, Scanner input){
-    int choice;
- 
-    //TODO: protect this - the user may input other numbers than 1 and 2
-    System.out.println("Please insert your user type");
-    System.out.println("1- cliente = 2- funcionario");
-    choice = input.nextInt();
-    input.nextLine();
+    int choice = 0;
+  
+    boolean running = true;
+    while(running){
+      System.out.println("Please insert your user type");
+      System.out.println("1- cliente = 2- funcionario");
+      choice = input.nextInt();
+      input.nextLine();
     
-    if(choice == 1){
-      user.set_type("cliente");
+      if(choice == 1){
+        set_type("cliente");
+        running = false;
 
-    } else if(choice == 2){
-      user.set_type("funcionario");
+      } else if(choice == 2){
+        set_type("funcionario");
+        running = false;
 
-    } else {
-      //TODO: make the loop continue here
+      } else {
+        System.out.println("Your input was invalid, please select one of the options");
+      }
+    }
+
+    System.out.println("Please insert your name");
+    String name = input.nextLine();
+    
+    set_name(name);
+    
+    running = true;
+    while(running){
+      System.out.println("Please insert your username");
+      String username = input.nextLine();
+
+      if(!db.check_if_username_unique(username)){
+        set_username(username);
+        running = false;
+      } else {
+        System.out.println("The username is already taken, please choose another");
+      }
     }
     
-    System.out.println("Please insert your name");
-    String name = user.nextLine();
-    
-    user.set_name(name);
-    
-    //TODO: do another loop here to verify if username is unique, basically do a database search
-    System.out.println("Please insert your username");
-    String username = input.nextLine();
+    running = true;
+    String password = null;
+    while(running){
+      System.out.println("Please insert your password");
+      password = input.nextLine();
+      
+      if(password != null){
+        set_password(password);
+        running = false;
+      } else {
+        System.out.println("The password cant be empty");
+      }
+    }
 
-    //end loop here
+    running = true;
+    while(running){
+      System.out.println("Please insert your email");
+        
+      //TODO: do email verification 
+      String email = input.nextLine();
+      running = false; 
+    }
 
-    System.out.println("Please insert your password");
-    String password = input.nextLine();
-
-    user.set_password(password);
+    //verify if lenght is == 9 and is unique
+    running = true;
+    while(running){
+      System.out.println("Please insert your NIF");
+      int NIF = input.nextInt();
+      input.nextLine();
+      
+      if((NIF > 99999999) && (NIF < 1000000000)){
+        //TODO: add NIF
+        running = false;
+      } else {
+        System.out.println("The inserted NIF is invalid");
+      }
+    }
     
-    //TODO: create a loop here to verify if email is valid
-    System.out.println("Please insert your email");
-    String email = input.nextLine();
-    
-    //TODO: verify if lenght is == 9 and is unique
-    System.out.println("Please insert your NIF");
-    int NIF = input.nextInt();
-    input.nextLine();
-    //end loop
     
     //TODO: verify if lenght is == 9 and starts with 9, 2 or 3
     System.out.println("Please insert your phone number");

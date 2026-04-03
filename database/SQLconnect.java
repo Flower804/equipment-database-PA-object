@@ -1,18 +1,55 @@
 package database;
 
 import java.sql.*;
+import java.util.Scanner;
+
 import model.User;
 
-public class SQLconnect {
+/**
+ *
+ * @author Flower/Gabriel Moita
+*/ 
 
+//TODO: add documentation
+
+public class SQLconnect {
+  
+
+  //================================accesses==============================
   public static void main(String[] args){
+    //TODO; verify if this is really necessary here 
+
     Connection conn = null;
     Statement st = null;
     ResultSet rs = null;
 
   }
+  
+  public boolean get_match(String username, String password){
+    boolean result = do_match(username, password);
+    return result;
+  }
+  
+  public User load_user(String username){
+    return get_user(username);
+  }
+  
+  public boolean check_if_username_unique(String username){
+    return check_username(username);
+  }
 
+  public boolean check_if_NIF_unique(int NIF){
+    return check_NIF(NIF);
+  }
+ //===============================private methods==========================
+ 
   private Connection get_connection(){
+    /**
+     *the get_connection() method serves as a way to 
+     *create a connection to the database, in this case db,
+      where all the tables and user's data is stored
+     */ 
+
     try{
       Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/db", "root", "GabrielMoita_129");
       return conn;
@@ -47,6 +84,8 @@ public class SQLconnect {
     }
   }
   
+  //==================================change values==========================================
+
   //Maybe view if we can just change all of this to just state = !state or smth like that
   private boolean turn_offline(String username){
     Connection conn = get_connection();
@@ -85,16 +124,8 @@ public class SQLconnect {
       return false;
     }
   }
-
-  public boolean get_match(String username, String password){
-    boolean result = do_match(username, password);
-    return result;
-  }
   
-  public User load_user(String username){
-    return get_user(username);
-  }
-
+  //=============================GETTERS====================================
   private User get_user(String username){
     Connection conn = get_connection();
     ResultSet rs = null;
@@ -127,5 +158,65 @@ public class SQLconnect {
     }
     return result;
   }
+  
+  //========================checkers=======================================
+  private boolean check_username(String username){
+    Connection conn = get_connection();
+    ResultSet rs = null;
 
+    try{
+      String query = "Select * from users where username = ?;";
+
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setString(1, username);
+
+      rs = st.executeQuery();
+
+      if(rs.next() == true){
+        return true; //the username already exists
+      } else {
+        return false; //the username doesnt exist
+      }
+    } catch(SQLException e){
+      e.printStackTrace();
+      return true;
+    }
+  }
+
+  private boolean check_NIF(int NIF){
+    Connection conn = get_connection();
+    ResultSet rs = null;
+    
+    //ehhhhhhhhh I feel like this is bad code need to take a look at this later
+    //maybe use the table names as prepared statement and do this on a loop instead of straight up writen up
+    try{
+      //check in clients table 
+      String query = "Select * from clientes where NIF = ?;";
+
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setInt(1, NIF);
+
+      rs = st.executeQuery();
+      
+      if(rs.next() == true){
+        return true; //the NIF was found in clients table
+      }
+      //check in funcionarios table
+      String Second_query = "Select * from funcionarios where NIF = ?;";
+
+      st = conn.prepareStatement(Second_query);
+      st.setInt(1, NIF);
+
+      rs = st.executeQuery();
+
+      if(rs.next() == true){
+        return true; //the NIF was found in funcionarios table 
+      } else {
+        return false; //the NIF is unique
+      }
+    } catch(SQLException e){
+      e.printStackTrace();
+      return true; //better to stop this than to just return this as accepted
+    }
+  }
 } 
