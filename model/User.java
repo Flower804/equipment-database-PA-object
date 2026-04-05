@@ -1,7 +1,12 @@
 package model;
 
 import database.SQLconnect;
+import Client; //cliente class
+import Employee; //funcionarios class
+
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class User{
   protected String name;
@@ -65,8 +70,13 @@ public class User{
     this.state = state;
   }
 
-  public void set_email(String email){
-    //TODO: do the email verification here maybe (with this I mean, create a method to do the veryfication)
+  public boolean set_email(String email){
+    if(isValid(email)){
+      this.email = email;
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public void set_type(String type){
@@ -74,6 +84,13 @@ public class User{
   }
 
   /*=====================user methods=============================*/
+  //taken from https://www.geeksforgeeks.org/java/check-email-address-valid-not-java/
+  private static boolean isValid(String email){
+    Pattern email_pattern = Pattern.compile("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@" + "(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
+
+    return email != null && Pattern.matches(email_pattern, email);
+  }
+
   //accesses
   public void set_user(SQLconnect db, String given_username){
     get_user(db, given_username);
@@ -157,17 +174,21 @@ public class User{
     running = true;
     while(running){
       System.out.println("Please insert your email");
-        
-      //TODO: do email verification 
+         
       String email = input.nextLine();
-      running = false; 
+      if(isValid(email)){
+        running = false;
+      } else {
+        System.out.println("the email that you've isenrted isnt valid");
+      }
     }
 
     //verify if lenght is == 9 and is unique
     running = true;
+    int NIF = -1;
     while(running){
       System.out.println("Please insert your NIF");
-      int NIF = input.nextInt();
+      NIF = input.nextInt();
       input.nextLine();
       
       if((NIF > 99999999) && (NIF < 1000000000)){
@@ -190,7 +211,10 @@ public class User{
 
     switch(choice){
       case(1): //the sign in is from a client
-        System.out.println("");
+        running = true;
+        while(running){
+          System.out.println("Please insert your phone number");
+        }
 
         break;
       case(2): //the sign in is from a funcionario
