@@ -71,7 +71,7 @@ public class User{
   }
 
   public boolean set_email(String email){
-    if(isValid(email)){
+    if(email_is_Valid(email)){
       this.email = email;
       return true;
     } else {
@@ -85,12 +85,31 @@ public class User{
 
   /*=====================user methods=============================*/
   //taken from https://www.geeksforgeeks.org/java/check-email-address-valid-not-java/
-  private static boolean isValid(String email){
+  private static boolean email_is_Valid(String email){
     Pattern email_pattern = Pattern.compile("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@" + "(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
     
     Matcher m = email_pattern.matcher(email);
 
     if((email != null) && (m.matches())){
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
+  private static boolean phone_number_is_Valid(int phone_number){
+    String string_phone_number = Integer.toString(phone_number);
+
+    Pattern phone_pattern_1 = Pattern.compile("9\\d\\d\\d\\d\\d\\d\\d\\d");
+    Pattern phone_pattern_2 = Pattern.compile("2\\d\\d\\d\\d\\d\\d\\d\\d");
+    Pattern phone_pattern_3 = Pattern.compile("3\\d\\d\\d\\d\\d\\d\\d\\d");
+    
+    //maybe put this in a consecutive chercker instead of doing everything at the same time
+    Matcher pattern_1 = phone_pattern_1.matcher(string_phone_number);
+    Matcher pattern_2 = phone_pattern_2.matcher(string_phone_number);
+    Matcher pattern_3 = phone_pattern_3.matcher(string_phone_number);
+
+    if(pattern_1.matches() || pattern_2.matches() || pattern_3.matches()){
       return true;
     } else {
       return false;
@@ -124,6 +143,15 @@ public class User{
 
   private void register(SQLconnect db, Scanner input){
     int choice = 0;
+
+    String name_to_register = null;
+    String username_to_register = null;
+    String password_to_register = null;
+    String email_to_register = null;
+    int NIF_to_register = null;
+    int phone_number_to_register = null;
+    String user_type_to_register = null;
+    String address_to_register = null;
   
     boolean running = true;
     while(running){
@@ -133,11 +161,11 @@ public class User{
       input.nextLine();
     
       if(choice == 1){
-        set_type("cliente");
+        user_type_to_register = "cliente";
         running = false;
 
       } else if(choice == 2){
-        set_type("funcionario");
+        user_type_to_register = "funcionario";
         running = false;
 
       } else {
@@ -148,7 +176,7 @@ public class User{
     System.out.println("Please insert your name");
     String name = input.nextLine();
     
-    set_name(name);
+    name_to_register = name;
     
     running = true;
     while(running){
@@ -156,7 +184,7 @@ public class User{
       String username = input.nextLine();
 
       if(!db.check_if_username_unique(username)){
-        set_username(username);
+        username_to_register = username;
         running = false;
       } else {
         System.out.println("The username is already taken, please choose another");
@@ -170,7 +198,7 @@ public class User{
       password = input.nextLine();
       
       if(password != null){
-        set_password(password);
+        password_to_register = password;
         running = false;
       } else {
         System.out.println("The password cant be empty");
@@ -182,7 +210,8 @@ public class User{
       System.out.println("Please insert your email");
          
       String email = input.nextLine();
-      if(isValid(email)){
+      if(email_is_Valid(email)){
+        email_to_register = email;
         running = false;
       } else {
         System.out.println("the email that you've isenrted isnt valid");
@@ -198,19 +227,27 @@ public class User{
       input.nextLine();
       
       if((NIF > 99999999) && (NIF < 1000000000)){
-        //TODO: add NIF
+        NIF_to_register = NIF;
         running = false;
       } else {
         System.out.println("The inserted NIF is invalid");
       }
     }
     
-    
-    //TODO: verify if lenght is == 9 and starts with 9, 2 or 3
-    System.out.println("Please insert your phone number");
-    int Phone_number = input.nextInt();
-    input.nextLine();
-    //end loop
+    running = true;
+    while(running){
+      System.out.println("Please insert your phone number");
+      int Phone_number = input.nextInt();
+      input.nextLine();
+
+      if(phone_number_is_Valid(Phone_number){
+        phone_number_to_register = Phone_number;
+        running = false;
+      } else {
+        System.out.println("the phone number you have inserted is invalid, please write a valid one");
+      
+      }
+    }
     
     System.out.println("Please insert your address");
     String address = input.nextLine();
@@ -219,7 +256,7 @@ public class User{
       case(1): //the sign in is from a client
         running = true;
         while(running){
-          System.out.println("Please insert your phone number");
+          System.out.println(" ");
         }
 
         break;
