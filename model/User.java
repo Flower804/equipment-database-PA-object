@@ -1,8 +1,8 @@
 package model;
 
 import database.SQLconnect;
-import Client; //cliente class
-import Employee; //funcionarios class
+import model.Client; //cliente class
+import model.Employee; //funcionarios class
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -87,8 +87,14 @@ public class User{
   //taken from https://www.geeksforgeeks.org/java/check-email-address-valid-not-java/
   private static boolean isValid(String email){
     Pattern email_pattern = Pattern.compile("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@" + "(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
+    
+    Matcher m = email_pattern.matcher(email);
 
-    return email != null && Pattern.matches(email_pattern, email);
+    if((email != null) && (m.matches())){
+      return true;
+    } else {
+      return false;
+    }
   }
 
   //accesses
