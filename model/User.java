@@ -256,7 +256,7 @@ public class User{
     
     //TODO: this whole last section feels rushed, need to rework it if I have time
     String activity_sector_to_register = null;
-    int grade_to_register = -1;
+    int grade_to_register = 0;
     String speciality_to_register = null;
     switch(choice){
       case(1): //the sign in is from a client
