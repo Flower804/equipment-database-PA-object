@@ -159,6 +159,11 @@ public class SQLconnect {
     return result;
   }
   
+  //========================methods========================================
+  public void user_register(int user_type, String name, String username, String password, String email, int NIF, int Phone_number, String address, String activity_sector_, int grade, String speciality){
+    Insert_user_register(user_type, name, username, password, email, NIF, Phone_number, address, activity_sector_, grade, speciality);
+  }
+  
   //========================checkers=======================================
   private boolean check_username(String username){
     Connection conn = get_connection();
@@ -217,6 +222,71 @@ public class SQLconnect {
     } catch(SQLException e){
       e.printStackTrace();
       return true; //better to stop this than to just return this as accepted
+    }
+  }
+
+  //insert in tables methods
+  //pass 
+  //1 -> client 
+  //2 -> employee
+  //3 -> admin
+  private void Insert_user_register(int user_type, String name, String username, String password, String email, int NIF, int Phone_number, String address, String activity_sector_, int grade, String speciality){
+    String type = null;
+    switch(user_type){
+      case(1):
+        type = "client";
+        break;
+      case(2):
+        type = "funcionario";
+        break;
+      case(3):
+        type = "manager";
+        break;
+    }
+
+    Connection conn = get_connection();
+    ResultSet rs = null;
+
+    try{
+      String query = "insert into users (name, username, password, state, email, type, accepted) Values (?, ?, ?, 0, ?, ?, no)";
+      
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setString(1, name);
+      st.setString(2, username);
+      st.setString(3, password);
+      st.setString(4, email);
+      st.setString(5, type);
+
+      rs = st.executeQuery();
+
+      if(user_type == 1){
+        String query_client = "insert into clientes (username, NIF, phone_number, address, activity_sector, escalao) Values (?, ?, ?, ?, ?, ?);";
+        
+        PreparedStatement st_1 = conn.prepareStatement(query_client);
+        st_1.setString(1, username);
+        st_1.setInt(2, NIF);
+        st_1.setInt(3, Phone_number);
+        st_1.setString(4, address);
+        st_1.setString(5, activity_sector_);
+        st_1.setInt(6, grade);
+
+        rs = st_1.executeQuery();
+      }else if(user_type == 2){
+        String query_funcionarios = "insert into funcionarios (username, NIF, phone_number, address, speciality, init_date) Values (?, ?, ?, ?, ?, getdate());";
+
+        PreparedStatement st_2 = conn.prepareStatement(query_funcionarios);
+        st_2.setString(1, username);
+        st_2.setInt(2, NIF);
+        st_2.setInt(3, Phone_number);
+        st_2.setString(4, address);
+        st_2.setString(5, speciality);
+
+        rs = st_2.executeQuery();
+      }else if(user_type == 3){
+        ;
+      }
+    }catch(SQLException e){
+      e.printStackTrace();
     }
   }
 } 

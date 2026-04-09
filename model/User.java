@@ -148,8 +148,8 @@ public class User{
     String username_to_register = null;
     String password_to_register = null;
     String email_to_register = null;
-    int NIF_to_register = null;
-    int phone_number_to_register = null;
+    int NIF_to_register = -1;
+    int phone_number_to_register = -1;
     String user_type_to_register = null;
     String address_to_register = null;
   
@@ -214,7 +214,7 @@ public class User{
         email_to_register = email;
         running = false;
       } else {
-        System.out.println("the email that you've isenrted isnt valid");
+        System.out.println("the email that you've isent isnt valid");
       }
     }
 
@@ -240,7 +240,7 @@ public class User{
       int Phone_number = input.nextInt();
       input.nextLine();
 
-      if(phone_number_is_Valid(Phone_number){
+      if(phone_number_is_Valid(Phone_number)){
         phone_number_to_register = Phone_number;
         running = false;
       } else {
@@ -252,20 +252,42 @@ public class User{
     System.out.println("Please insert your address");
     String address = input.nextLine();
 
+    address_to_register = address;
+    
+    //TODO: this whole last section feels rushed, need to rework it if I have time
+    String activity_sector_to_register = null;
+    int grade_to_register = -1;
+    String speciality_to_register = null;
     switch(choice){
       case(1): //the sign in is from a client
         running = true;
-        while(running){
-          System.out.println(" ");
-        }
 
+        while(running){
+          System.out.println("Por favor insira o seu setor de atividade");
+          activity_sector_to_register = input.nextLine();
+
+          if(activity_sector_to_register != null){
+            running = false;
+          }
+        }
+        
+        //TODO: save to bd 
         break;
       case(2): //the sign in is from a funcionario
-        System.out.println("");
+        running = true;
 
+        while(running){
+          System.out.println("Por favor insira a sua especialidade");
+          speciality_to_register = input.nextLine();
+
+          if(speciality_to_register != null){
+            
+            running = false;
+          }
+        }
         break;
     }
-
-    //TODO: save stuff to ask registration table or whatever I come up with    
+    //TODO: maybe change this method to 2 or 3 methods so I can save for specific tables 
+    db.user_register(choice, name_to_register, username_to_register, password_to_register, email_to_register, NIF_to_register, phone_number_to_register, address_to_register, activity_sector_to_register, grade_to_register, speciality_to_register);
   }
 } 
