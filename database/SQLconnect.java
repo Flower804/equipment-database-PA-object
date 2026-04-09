@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.Scanner;
 
 import model.User;
+import database.secret;
 
 /**
  *
@@ -18,6 +19,7 @@ public class SQLconnect {
   //================================accesses==============================
   public static void main(String[] args){
     //TODO; verify if this is really necessary here 
+    secret secret = new secret();
 
     Connection conn = null;
     Statement st = null;
@@ -49,9 +51,11 @@ public class SQLconnect {
      *create a connection to the database, in this case db,
       where all the tables and user's data is stored
      */ 
+    
+    String database_password = secret.get_password();
 
     try{
-      Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/db", "root", "GabrielMoita_129");
+      Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/db", "root", database_password);
       return conn;
     }catch(SQLException e){
       System.out.println("A sql exception has occured: " + e);
@@ -245,10 +249,9 @@ public class SQLconnect {
     }
 
     Connection conn = get_connection();
-    ResultSet rs = null;
 
     try{
-      String query = "insert into users (name, username, password, state, email, type, accepted) Values (?, ?, ?, 0, ?, ?, no)";
+      String query = "insert into users (name, username, password, state, email, type, accepted) Values (?, ?, ?, 0, ?, ?, false)";
       
       PreparedStatement st = conn.prepareStatement(query);
       st.setString(1, name);
@@ -257,7 +260,7 @@ public class SQLconnect {
       st.setString(4, email);
       st.setString(5, type);
 
-      rs = st.executeQuery();
+      int rs = st.executeUpdate();
 
       if(user_type == 1){
         String query_client = "insert into clientes (username, NIF, phone_number, address, activity_sector, escalao) Values (?, ?, ?, ?, ?, ?);";
@@ -270,7 +273,7 @@ public class SQLconnect {
         st_1.setString(5, activity_sector_);
         st_1.setInt(6, grade);
 
-        rs = st_1.executeQuery();
+        rs = st_1.executeUpdate();
       }else if(user_type == 2){
         String query_funcionarios = "insert into funcionarios (username, NIF, phone_number, address, speciality, init_date) Values (?, ?, ?, ?, ?, getdate());";
 
@@ -281,7 +284,7 @@ public class SQLconnect {
         st_2.setString(4, address);
         st_2.setString(5, speciality);
 
-        rs = st_2.executeQuery();
+        rs = st_2.executeUpdate();
       }else if(user_type == 3){
         ;
       }
