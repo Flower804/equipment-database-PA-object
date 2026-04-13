@@ -43,6 +43,10 @@ public class SQLconnect {
   public boolean check_if_NIF_unique(int NIF){
     return check_NIF(NIF);
   }
+
+  public void change_username_connect(String old_username, String new_username){
+    change_username(old_username, new_username);
+  }
  //===============================private methods==========================
  
   private Connection get_connection(){
@@ -95,7 +99,6 @@ public class SQLconnect {
   //Maybe view if we can just change all of this to just state = !state or smth like that
   private boolean turn_offline(String username){
     Connection conn = get_connection();
-    ResultSet rs = null;
 
     try{
       String query = " update users set state = 1 where username = ?;";
@@ -103,8 +106,9 @@ public class SQLconnect {
       PreparedStatement st = conn.prepareStatement(query);
       st.setString(1, username);
 
-      rs = st.executeQuery();
-
+      int rs = st.executeUpdate();
+      
+      conn.commit();
       return true;
     }catch(SQLException e){
       System.out.println("A SQLException has occured: " + e);
@@ -114,7 +118,6 @@ public class SQLconnect {
 
   private boolean turn_online(String username){
     Connection conn = get_connection();
-    ResultSet rs = null;
 
     try{
       String query = " update users set state = 0 where username = ?;";
@@ -122,12 +125,31 @@ public class SQLconnect {
       PreparedStatement st = conn.prepareStatement(query);
       st.setString(1, username);
 
-      rs = st.executeQuery();
-
+      int rs = st.executeUpdate();
+      
+      conn.commit();
       return true;
     }catch(SQLException e){
       System.out.println("A SQLException has occured: " + e);
       return false;
+    }
+  }
+
+  private void change_username(String old_username, String new_username){
+    Connection conn = get_connection();
+
+    try{
+      String query = "Update users set username = ? where username = ?;";
+
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setString(1, new_username);
+      st.setString(2, old_username);
+
+      int rs = st.executeUpdate();
+
+      conn.commit();
+    }catch(SQLException e){
+      e.printStackTrace();
     }
   }
   

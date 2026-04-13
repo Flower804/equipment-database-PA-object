@@ -120,12 +120,80 @@ public class User{
   public void set_user(SQLconnect db, String given_username){
     get_user(db, given_username);
   }
-
+  
   public void register_user(SQLconnect db, Scanner input){
     register(db, input);
   }
+  
+  //============================= organizer =======================
+  public void capacities(SQLconnect db, Scanner input, int choice){
+    switch(choice){
+      case(1):
+        change_info(db,input);
+        break;
+      case(2):
+        break;
+      case(3):
+        break;
+    }
+  }
 
-  //private stuff
+
+  //============================= methods =========================
+  private void change_info(SQLconnect db, Scanner input){ 
+    System.out.println("Your current info is \n1-name: " + get_name() + "\n2-username: " + get_username() + "\n3-password: " + get_password() + "\n4-email: " + get_email() + "\n5-exit");
+    System.out.println("What do you want to change?");
+    int choice = input.nextInt();
+    input.nextLine();
+    
+    boolean running = true;
+
+    while(running)
+      switch(choice){
+        case(1):
+          running = false;
+          break;
+        case(2):
+          change_username(db, input);
+          running = false;
+          break;
+        case(3):
+          running = false;
+          break;
+        case(4):
+          running = false;
+          break;
+        case(5):
+          running = false;
+          break;
+        default:
+          System.out.println("Sorry your input was invalid, please try again");
+    }
+  }
+
+  //part of change_info 
+  private void change_username(SQLconnect db, Scanner input){
+    String old_username = get_username();
+
+    System.out.println("Your old username is " + old_username + "\n do you want to change it? 1-yes 2-no");
+    int choice = input.nextInt();
+    input.nextLine();
+
+    if(choice == 1){
+      boolean running = true;
+      
+      while(running){
+        System.out.println("What do you want your new username?");
+        String new_username = input.nextLine();
+        if(db.check_if_username_unique(new_username)){
+          System.out.println("sorry, that username is already in use, please choose another");
+        } else {
+          db.change_username_connect(old_username, new_username);
+        }
+      }
+    }
+  }
+
   private void get_user(SQLconnect db, String given_username){
     User gotten_user = db.load_user(given_username);
     

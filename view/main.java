@@ -74,8 +74,67 @@ public class main{
     }
   }
 
+  private static void Client_loop(Scanner input){
+    boolean running = true;
+    int choice;
 
+    while(running){
+      //TODO: change this two System outs to only one, and do the same on the other loops
+      System.out.println("Please select what do you want to do");
+      System.out.println("1-change my info \n 9-exit");
+      choice = input.nextInt();
+      input.nextLine();
+
+      switch(choice){
+        case(1):
+          break;
+        case(9):
+          running = false;
+          break;
+      }
+    }
+  }
+
+  private static void Employee_loop(){
+   boolean running = true;
+    int choice;
+
+    while(running){
+      //TODO: change this two System outs to only one, and do the same on the other loops
+      System.out.println("Please select what do you want to do");
+      System.out.println("1-change my info \n 9-exit");
+      choice = input.nextInt();
+      input.nextLine();
+
+      switch(choice){
+        case(1):
+          break;
+        case(9):
+          running = false;
+          break;
+      }
+    } 
+  }
+  
+  private static void Manager_loop(){
+    boolean running = true;
+    int choice;
+
+    while(running){
+      //TODO: change this two System outs to only one, and do the same on the other loops
+      System.out.println("Please select what do you want to do");
+      System.out.println("1-change my info \n 9-exit");
+      choice = input.nextInt();
+      input.nextLine();
+
+      switch(choice){
+        case(1):
+          break;
+        case(9):
+          running = false;
+          break;
+      }
+    }  
+  }
 
 }
-
-
