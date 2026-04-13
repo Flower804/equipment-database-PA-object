@@ -56,6 +56,8 @@ public class SQLconnect {
 
     try{
       Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/db", "root", database_password);
+      
+      conn.setAutoCommit(false);
       return conn;
     }catch(SQLException e){
       System.out.println("A sql exception has occured: " + e);
@@ -168,6 +170,9 @@ public class SQLconnect {
     Insert_user_register(user_type, name, username, password, email, NIF, Phone_number, address, activity_sector_, grade, speciality);
   }
   
+  public void request_register(String username){
+    User_reg_request(username);
+  }
   //========================checkers=======================================
   private boolean check_username(String username){
     Connection conn = get_connection();
@@ -274,8 +279,10 @@ public class SQLconnect {
         st_1.setInt(6, grade);
 
         rs = st_1.executeUpdate();
+
+        conn.commit();
       }else if(user_type == 2){
-        String query_funcionarios = "insert into funcionarios (username, NIF, phone_number, address, speciality, init_date) Values (?, ?, ?, ?, ?, getdate());";
+        String query_funcionarios = "insert into funcionarios (username, NIF, phone_number, address, speciality, init_date) Values (?, ?, ?, ?, ?, curdate());";       
 
         PreparedStatement st_2 = conn.prepareStatement(query_funcionarios);
         st_2.setString(1, username);
@@ -285,9 +292,28 @@ public class SQLconnect {
         st_2.setString(5, speciality);
 
         rs = st_2.executeUpdate();
+        
+        conn.commit();
       }else if(user_type == 3){
         ;
       }
+    }catch(SQLException e){
+      e.printStackTrace();
+    }
+  }
+
+  private void User_reg_request(String username){
+    Connection conn = get_connection();
+    
+    try{
+      String query = "Insert into user_reg_request (username) Values (?)";
+
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setString(1, username);
+      
+      int rs = st.executeUpdate();
+
+      conn.commit();
     }catch(SQLException e){
       e.printStackTrace();
     }

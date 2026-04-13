@@ -277,7 +277,7 @@ public class User{
         running = true;
 
         while(running){
-          System.out.println("Por favor insira a sua especialidade");
+          System.out.println("Por favor insira a sua especialidade (1-5)");
           speciality_to_register = input.nextLine();
 
           if(speciality_to_register != null){
@@ -289,5 +289,8 @@ public class User{
     }
     //TODO: maybe change this method to 2 or 3 methods so I can save for specific tables 
     db.user_register(choice, name_to_register, username_to_register, password_to_register, email_to_register, NIF_to_register, phone_number_to_register, address_to_register, activity_sector_to_register, grade_to_register, speciality_to_register);
+    db.request_register(username_to_register);
+    //TODO: add notification here
+    //and maybe pass the username
   }
 } 
