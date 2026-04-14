@@ -29,12 +29,12 @@ public class main{
         switch(choice){
           case(1):
             register(input);
-            on_exit();
+            on_exit(user.get_username());
             break;
 
           case(2):
             login(input);
-            on_exit();
+            on_exit(user.get_username());
             break;
       
           default:
@@ -44,7 +44,9 @@ public class main{
     }
   }
   
-  private static void on_exit(){
+  private static void on_exit(String username){
+    db.turn_user_offline(username);
+
     System.out.println("Adeus " + user.get_username());
     System.exit(0);
   }
@@ -76,9 +78,24 @@ public class main{
         System.out.println("user found");
         if(db.check_if_user_accepted(username)){
           user.set_user(db ,username);
+          db.turn_user_online(username);
           running = false;
           System.out.println("bem-vindo " + user.get_username());
-          //TODO: in case of it being a Client or a Employee do extra load of their info
+          
+          String user_type = user.get_type();
+          switch(user_type){
+            case("client"):
+              //TODO: load client info 
+            
+              break;
+            case("funcionario"):
+              //TODO: load funcionario info
+              
+              break;
+            case("manager"):
+              Manager_loop(db, input);
+              break;
+          }
         } else {
           System.out.println("Sorry, you still havent been accepted by an user");
         }
@@ -88,7 +105,7 @@ public class main{
     }
   }
 
-  private static void Client_loop(Scanner input){
+  private static void Client_loop(SQLconnect db, Scanner input){
     boolean running = true;
     int choice;
 
@@ -109,7 +126,7 @@ public class main{
     }
   }
 
-  private static void Employee_loop(){
+  private static void Employee_loop(SQLconnect db, Scanner input){
    boolean running = true;
     int choice;
 
@@ -130,9 +147,13 @@ public class main{
     } 
   }
   
-  private static void Manager_loop(){
+  private static void Manager_loop(SQLconnect db, Scanner input){
     boolean running = true;
     int choice;
+    
+    //=======================debbugging==================
+    System.out.println("On manager loop");
+    //===================================================
 
     while(running){
       //TODO: change this two System outs to only one, and do the same on the other loops

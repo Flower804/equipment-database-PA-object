@@ -55,6 +55,14 @@ public class SQLconnect {
   public void change_username_connect(String old_username, String new_username){
     change_username(old_username, new_username);
   }
+
+  public void turn_user_online(String username){
+    turn_online(username);
+  }
+
+  public void turn_user_offline(String username){
+    turn_offline(username);
+  }
  //===============================private methods==========================
  
   private Connection get_connection(){
@@ -321,7 +329,7 @@ public class SQLconnect {
         type = "client";
         break;
       case(2):
-        type = "funcionario";
+        type = "funcionario";  //TODO: fix this to english so there is language consistenci on the code remember professor Gil Vicente
         break;
       case(3):
         type = "manager";
