@@ -27,9 +27,17 @@ public class SQLconnect {
 
   }
   
+  public boolean check_if_users_exist(){
+    return check_users();
+  }
+
   public boolean get_match(String username, String password){
     boolean result = do_match(username, password);
     return result;
+  }
+
+  public boolean check_if_user_accepted(String username){
+    return check_accepted(username);
   }
   
   public User load_user(String username){
@@ -70,6 +78,28 @@ public class SQLconnect {
     return null;
   }
   
+  private boolean check_users(){
+    Connection conn = get_connection();
+    ResultSet rs = null;
+
+    try{
+      String query = "Select COUNT(*) as total from users;";
+      
+      PreparedStatement st = conn.prepareStatement(query);
+      rs = st.executeQuery();
+      if(rs.next()){
+        int count = rs.getInt("total");
+        return count > 0;
+      } else {
+        return false;
+      }
+      
+    } catch(SQLException e){
+      e.printStackTrace();
+      return false;
+    } 
+  }
+
   private boolean do_match(String username, String password){
     Connection conn = get_connection();
     ResultSet rs = null;
@@ -90,6 +120,29 @@ public class SQLconnect {
       }
     }catch(SQLException e){
       System.out.println("A SQLException has occured: " + e);
+      return false;
+    }
+  }
+
+  private boolean check_accepted(String username){
+    Connection conn = get_connection();
+    ResultSet rs = null;
+
+    try{
+      String query = "Select * from users where username = ? and accepted = 1;";
+
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setString(1, username);
+
+      rs = st.executeQuery();
+
+      if(rs.next() == true){
+        return true; //the user was accepted by manager 
+      } else {
+        return false;
+      }
+    }catch(SQLException e){
+      e.printStackTrace();
       return false;
     }
   }
@@ -278,7 +331,14 @@ public class SQLconnect {
     Connection conn = get_connection();
 
     try{
-      String query = "insert into users (name, username, password, state, email, type, accepted) Values (?, ?, ?, 0, ?, ?, false)";
+      int accepted = 0;
+      if(user_type == 3){
+        accepted = 1;
+      } else {
+        accepted = 0;
+      }
+      
+      String query = "insert into users (name, username, password, state, email, type, accepted) Values (?, ?, ?, 0, ?, ?, ?)";
       
       PreparedStatement st = conn.prepareStatement(query);
       st.setString(1, name);
@@ -286,6 +346,7 @@ public class SQLconnect {
       st.setString(3, password);
       st.setString(4, email);
       st.setString(5, type);
+      st.setInt(6, accepted);
 
       int rs = st.executeUpdate();
 
@@ -317,7 +378,14 @@ public class SQLconnect {
         
         conn.commit();
       }else if(user_type == 3){
-        ;
+        String query_manager = "insert into managers (username) Values (?);";
+
+        PreparedStatement st_3 = conn.prepareStatement(query_manager);
+        st_3.setString(1, username);
+      
+        rs = st_3.executeUpdate();
+
+        conn.commit();
       }
     }catch(SQLException e){
       e.printStackTrace();

@@ -15,25 +15,31 @@ public class main{
 
   public static void main(String[] args) {
     while(true){
-      System.out.println("Please choose an option");
-      System.out.println("1: register \n2: login");
+      if(!db.check_if_users_exist()){
+        System.out.println("No users found, please create a manager");
+        register_manager(input);
+        break;
+      } else {
+        System.out.println("Please choose an option");
+        System.out.println("1: register \n2: login");
     
-      int choice = input.nextInt();
-      input.nextLine();
+        int choice = input.nextInt();
+        input.nextLine();
     
-      switch(choice){
-        case(1):
-          register(input);
-          on_exit();
-          break;
+        switch(choice){
+          case(1):
+            register(input);
+            on_exit();
+            break;
 
-        case(2):
-          login(input);
-          on_exit();
-          break;
+          case(2):
+            login(input);
+            on_exit();
+            break;
       
-        default:
-          System.out.println("invalid choice, please choose again");
+          default:
+            System.out.println("invalid choice, please choose again");
+        }
       }
     }
   }
@@ -44,7 +50,11 @@ public class main{
   }
   
   private static void register(Scanner input){
-    user.register_user(db, input);
+    user.register_user(db, input, false);
+  }
+
+  private static void register_manager(Scanner input){
+    user.register_user(db, input, true);
   }
 
   private static void login(Scanner input){
@@ -64,10 +74,14 @@ public class main{
       match = db.get_match(username, password);
       if(match){
         System.out.println("user found");
-        user.set_user(db ,username);
-        running = false;
-        System.out.println("bem-vindo " + user.get_username());
-        //TODO: in case of it being a Client or a Employee do extra load of their info
+        if(db.check_if_user_accepted(username)){
+          user.set_user(db ,username);
+          running = false;
+          System.out.println("bem-vindo " + user.get_username());
+          //TODO: in case of it being a Client or a Employee do extra load of their info
+        } else {
+          System.out.println("Sorry, you still havent been accepted by an user");
+        }
       } else {
         System.out.println("no match found, please try again");
       }

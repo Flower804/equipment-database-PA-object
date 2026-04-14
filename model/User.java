@@ -121,8 +121,8 @@ public class User{
     get_user(db, given_username);
   }
   
-  public void register_user(SQLconnect db, Scanner input){
-    register(db, input);
+  public void register_user(SQLconnect db, Scanner input, boolean priveledged){
+    register(db, input, priveledged);
   }
   
   //============================= organizer =======================
@@ -137,7 +137,6 @@ public class User{
         break;
     }
   }
-
 
   //============================= methods =========================
   private void change_info(SQLconnect db, Scanner input){ 
@@ -209,7 +208,7 @@ public class User{
     }
   }
 
-  private void register(SQLconnect db, Scanner input){
+  private void register(SQLconnect db, Scanner input,boolean priveledged){
     int choice = 0;
 
     String name_to_register = null;
@@ -220,27 +219,35 @@ public class User{
     int phone_number_to_register = -1;
     String user_type_to_register = null;
     String address_to_register = null;
-  
+    String activity_sector_to_register = null;
+    int grade_to_register = 0;
+    String speciality_to_register = null; 
+
     boolean running = true;
-    while(running){
-      System.out.println("Please insert your user type");
-      System.out.println("1- cliente = 2- funcionario");
-      choice = input.nextInt();
-      input.nextLine();
-    
-      if(choice == 1){
-        user_type_to_register = "cliente";
-        running = false;
+    if(priveledged){
+      choice = 3;
+      user_type_to_register = "manager";
+    } else {
+      while(running){
+        System.out.println("Please insert your user type");
+        System.out.println("1- cliente = 2- funcionario");
+        choice = input.nextInt();
+        input.nextLine();
+        if(choice == 1){
+          user_type_to_register = "cliente";
+          running = false;
 
-      } else if(choice == 2){
-        user_type_to_register = "funcionario";
-        running = false;
+        } else if(choice == 2){
+          user_type_to_register = "funcionario";
+          running = false;
 
-      } else {
-        System.out.println("Your input was invalid, please select one of the options");
+        } else {
+          System.out.println("Your input was invalid, please select one of the options");
+        }
       }
     }
-
+  
+    
     System.out.println("Please insert your name");
     String name = input.nextLine();
     
@@ -285,79 +292,83 @@ public class User{
         System.out.println("the email that you've isent isnt valid");
       }
     }
-
-    //verify if lenght is == 9 and is unique
-    running = true;
-    int NIF = -1;
-    while(running){
-      System.out.println("Please insert your NIF");
-      NIF = input.nextInt();
-      input.nextLine();
+  
+    if(choice != 3){
+      //verify if lenght is == 9 and is unique
+      running = true;
+      int NIF = -1;
+      while(running){
+        System.out.println("Please insert your NIF");
+        NIF = input.nextInt();
+        input.nextLine();
       
-      if((NIF > 99999999) && (NIF < 1000000000)){
-        NIF_to_register = NIF;
-        running = false;
-      } else {
-        System.out.println("The inserted NIF is invalid");
-      }
-    }
-    
-    running = true;
-    while(running){
-      System.out.println("Please insert your phone number");
-      int Phone_number = input.nextInt();
-      input.nextLine();
-
-      if(phone_number_is_Valid(Phone_number)){
-        phone_number_to_register = Phone_number;
-        running = false;
-      } else {
-        System.out.println("the phone number you have inserted is invalid, please write a valid one");
-      
-      }
-    }
-    
-    System.out.println("Please insert your address");
-    String address = input.nextLine();
-
-    address_to_register = address;
-    
-    //TODO: this whole last section feels rushed, need to rework it if I have time
-    String activity_sector_to_register = null;
-    int grade_to_register = 0;
-    String speciality_to_register = null;
-    switch(choice){
-      case(1): //the sign in is from a client
-        running = true;
-
-        while(running){
-          System.out.println("Por favor insira o seu setor de atividade");
-          activity_sector_to_register = input.nextLine();
-
-          if(activity_sector_to_register != null){
-            running = false;
-          }
+        if((NIF > 99999999) && (NIF < 1000000000)){
+          NIF_to_register = NIF;
+          running = false;
+        } else {
+          System.out.println("The inserted NIF is invalid");
         }
+      }
+    
+      running = true;
+      while(running){
+        System.out.println("Please insert your phone number");
+        int Phone_number = input.nextInt();
+        input.nextLine();
+
+        if(phone_number_is_Valid(Phone_number)){
+          phone_number_to_register = Phone_number;
+          running = false;
+        } else {
+          System.out.println("the phone number you have inserted is invalid, please write a valid one");
+      
+        }
+      }
+    
+      System.out.println("Please insert your address");
+      String address = input.nextLine();
+
+      address_to_register = address;
+    
+      //TODO: this whole last section feels rushed, need to rework it if I have time 
+      switch(choice){
+        case(1): //the sign in is from a client
+          running = true;
+
+          while(running){
+            System.out.println("Por favor insira o seu setor de atividade");
+            activity_sector_to_register = input.nextLine();
+
+            if(activity_sector_to_register != null){
+              running = false;
+            }
+          }
         
-        //TODO: save to bd 
-        break;
-      case(2): //the sign in is from a funcionario
-        running = true;
+          //TODO: save to bd 
+          break;
+        case(2): //the sign in is from a funcionario
+          running = true;
 
-        while(running){
-          System.out.println("Por favor insira a sua especialidade (1-5)");
-          speciality_to_register = input.nextLine();
+          while(running){
+            System.out.println("Por favor insira a sua especialidade (1-5)");
+            speciality_to_register = input.nextLine();
 
-          if(speciality_to_register != null){
+            if(speciality_to_register != null){
             
-            running = false;
+              running = false;
+            }
           }
-        }
-        break;
+          break;
+      }
     }
+
     //TODO: maybe change this method to 2 or 3 methods so I can save for specific tables 
-    db.user_register(choice, name_to_register, username_to_register, password_to_register, email_to_register, NIF_to_register, phone_number_to_register, address_to_register, activity_sector_to_register, grade_to_register, speciality_to_register);
-    db.request_register(username_to_register);
+    if(priveledged){
+      db.user_register(choice, name_to_register, username_to_register, password_to_register, email_to_register, NIF_to_register, phone_number_to_register, address_to_register, activity_sector_to_register, grade_to_register, speciality_to_register);
+    } else {
+      db.user_register(choice, name_to_register, username_to_register, password_to_register, email_to_register, NIF_to_register, phone_number_to_register, address_to_register, activity_sector_to_register, grade_to_register, speciality_to_register);
+      db.request_register(username_to_register);
+    }
     //TODO: add notification here
     //and maybe pass the username
   }
