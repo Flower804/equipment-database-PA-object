@@ -3,6 +3,7 @@ package model;
 import database.SQLconnect;
 import model.Client; //cliente class
 import model.Employee; //funcionarios class
+import model.manager;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
