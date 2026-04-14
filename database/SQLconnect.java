@@ -2,6 +2,7 @@ package database;
 
 import java.sql.*;
 import java.util.Scanner;
+import java.time.LocalTime;
 
 import model.User;
 import database.secret;
@@ -62,6 +63,12 @@ public class SQLconnect {
 
   public void turn_user_offline(String username){
     turn_offline(username);
+  }
+
+  private String get_current_time(){
+    LocalTime currentTime = LocalTime.now();
+    String time = ""+currentTime;
+    return time;
   }
  //===============================private methods==========================
  
@@ -170,6 +177,20 @@ public class SQLconnect {
       int rs = st.executeUpdate();
       
       conn.commit();
+
+      String notification = "insert into notification (type, username, description, is_read) Values (?, ?, ?, 1); ";
+      
+      String description = "User " + username + " has logged off at time: " + get_current_time(); 
+
+      PreparedStatement st_notif = conn.prepareStatement(notification);
+      st_notif.setString(1, "log off");
+      st_notif.setString(2, username);
+      st_notif.setString(3, description);
+      
+      rs = st_notif.executeUpdate();
+
+      conn.commit();
+
       return true;
     }catch(SQLException e){
       System.out.println("A SQLException has occured: " + e);
