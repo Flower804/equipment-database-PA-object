@@ -187,7 +187,7 @@ public class User{
         if(db.check_if_username_unique(new_username)){
           System.out.println("sorry, that username is already in use, please choose another");
         } else {
-          db.change_username_connect(old_username, new_username);
+          db.change_username_connect(old_username, new_username, new_username);
         }
       }
     }

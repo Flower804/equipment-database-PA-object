@@ -53,8 +53,8 @@ public class SQLconnect {
     return check_NIF(NIF);
   }
 
-  public void change_username_connect(String old_username, String new_username){
-    change_username(old_username, new_username);
+  public void change_username_connect(String old_username, String new_username, String asker_username){
+    change_username(old_username, new_username, asker_username);
   }
 
   public void turn_user_online(String username){
@@ -210,6 +210,20 @@ public class SQLconnect {
       int rs = st.executeUpdate();
       
       conn.commit();
+
+      String notification = "Insert into notification (type, username, description, is_read) Values (?, ?, ?, 1);";
+
+      String description = "User " + username + " has loggen on at time: " + get_current_time();
+
+      PreparedStatement st_notif = conn.prepareStatement(notification);
+      st_notif.setString(1, "log on");
+      st_notif.setString(2, username);
+      st_notif.setString(3, description);
+
+      rs = st_notif.executeUpdate();
+
+      conn.commit();
+
       return true;
     }catch(SQLException e){
       System.out.println("A SQLException has occured: " + e);
@@ -217,7 +231,7 @@ public class SQLconnect {
     }
   }
 
-  private void change_username(String old_username, String new_username){
+  private void change_username(String old_username, String new_username, String changer_username){
     Connection conn = get_connection();
 
     try{
@@ -228,6 +242,19 @@ public class SQLconnect {
       st.setString(2, old_username);
 
       int rs = st.executeUpdate();
+
+      conn.commit();
+
+      String notification = "insert into notification (type, username, description, is_read) Values (?, ?, ?, 1);";
+
+      String description = "User " + new_username + " changed the username of " + old_username + " to " + new_username + " at time: " + get_current_time();
+
+      PreparedStatement st_notif = conn.prepareStatement(notification);
+      st_notif.setString(1, "change name");
+      st_notif.setString(2, changer_username);
+      st_notif.setString(3, description);
+
+      rs = st_notif.executeUpdate();
 
       conn.commit();
     }catch(SQLException e){
@@ -431,6 +458,19 @@ public class SQLconnect {
       st.setString(1, username);
       
       int rs = st.executeUpdate();
+
+      conn.commit();
+
+      String notification = "insert into notification (type, username, description, is_read) Values (?, ?, ?, 1);";
+
+      String description = "User " + username + " has requested to register at: " + get_current_time();
+
+      PreparedStatement st_notif = conn.prepareStatement(notification);
+      st_notif.setString(1, "registration reqiest");
+      st_notif.setString(2, username);
+      st_notif.setString(3, description);
+
+      rs = st_notif.executeUpdate();
 
       conn.commit();
     }catch(SQLException e){
