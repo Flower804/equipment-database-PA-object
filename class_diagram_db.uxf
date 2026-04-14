@@ -1,4 +1,4 @@
-<diagram program="umletino" version="15.1"><zoom_level>7</zoom_level><element><id>UMLClass</id><coordinates><x>364</x><y>91</y><w>147</w><h>133</h></coordinates><panel_attributes>User
+<diagram program="umletino" version="15.1"><zoom_level>7</zoom_level><element><id>UMLClass</id><coordinates><x>378</x><y>175</y><w>147</w><h>133</h></coordinates><panel_attributes>User
 --
 - name: char(30)
 - username: varchar(255) &lt;PK&gt;
@@ -8,7 +8,7 @@
 - type; varchar(255)
 - accepted: boolean
 --
-username &lt;PK&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>364</x><y>301</y><w>147</w><h>105</h></coordinates><panel_attributes>clientes
+username &lt;PK&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>378</x><y>385</y><w>147</w><h>105</h></coordinates><panel_attributes>clientes
 --
 - username &lt;FK&gt;
 - NIF int(9) &lt;PK&gt;
@@ -18,7 +18,7 @@ username &lt;PK&gt;</panel_attributes><additional_attributes></additional_attrib
 - escalao int(1)
 --
 NIF &lt;PK&gt;
-username&lt;FK&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>623</x><y>301</y><w>147</w><h>105</h></coordinates><panel_attributes>Funcionario
+username&lt;FK&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>637</x><y>385</y><w>147</w><h>105</h></coordinates><panel_attributes>Funcionario
 --
 - username &lt;FK&gt;
 - NIF int(9) &lt;PK&gt;
@@ -28,21 +28,23 @@ username&lt;FK&gt;</panel_attributes><additional_attributes></additional_attribu
 - data_inicio Date
 --
 NIF &lt;PK&gt;
-username &lt;FK&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>126</x><y>301</y><w>147</w><h>70</h></coordinates><panel_attributes>Manager
+username &lt;FK&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>140</x><y>385</y><w>147</w><h>70</h></coordinates><panel_attributes>Manager
 --
 - username &lt;FK&gt;
 --
-username &lt;FK&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>420</x><y>217</y><w>287</w><h>98</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;70;390;70;390;120</additional_attributes></element><element><id>Relation</id><coordinates><x>420</x><y>217</y><w>21</w><h>98</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;120</additional_attributes></element><element><id>Relation</id><coordinates><x>182</x><y>217</y><w>259</w><h>98</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>350;10;350;70;10;70;10;120</additional_attributes></element><element><id>UMLClass</id><coordinates><x>644</x><y>112</y><w>147</w><h>56</h></coordinates><panel_attributes>user_reg_request
+username &lt;FK&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>434</x><y>301</y><w>287</w><h>98</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;70;390;70;390;120</additional_attributes></element><element><id>Relation</id><coordinates><x>434</x><y>301</y><w>21</w><h>98</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;120</additional_attributes></element><element><id>Relation</id><coordinates><x>196</x><y>301</y><w>259</w><h>98</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>350;10;350;70;10;70;10;120</additional_attributes></element><element><id>UMLClass</id><coordinates><x>658</x><y>196</y><w>147</w><h>56</h></coordinates><panel_attributes>user_reg_request
 --
 username varchar(255) &lt;FK&gt;
 --
 username &lt;FK&gt;
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>504</x><y>133</y><w>154</w><h>28</h></coordinates><panel_attributes>lt=-
-</panel_attributes><additional_attributes>10;20;200;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>126</x><y>448</y><w>147</w><h>70</h></coordinates><panel_attributes>Notification
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>518</x><y>217</y><w>154</w><h>28</h></coordinates><panel_attributes>lt=-
+</panel_attributes><additional_attributes>10;20;200;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>105</x><y>203</y><w>147</w><h>77</h></coordinates><panel_attributes>Notification
 --
 -type varchar(255)
+-username varchar(255)
 -description varchar(255)
 -read bool
 --
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>182</x><y>364</y><w>21</w><h>98</h></coordinates><panel_attributes>lt=-
-</panel_attributes><additional_attributes>10;10;10;120</additional_attributes></element></diagram>
+username &lt;FK&gt;
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>245</x><y>224</y><w>147</w><h>28</h></coordinates><panel_attributes>lt=-
+</panel_attributes><additional_attributes>190;20;10;20</additional_attributes></element></diagram>
