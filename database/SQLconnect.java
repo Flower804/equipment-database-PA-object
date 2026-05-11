@@ -15,17 +15,14 @@ import database.secret;
 //TODO: add documentation
 
 public class SQLconnect {
-  
+  Connection conn = get_connection(); 
 
   //================================accesses==============================
   public static void main(String[] args){
     //TODO; verify if this is really necessary here 
     secret secret = new secret();
 
-    Connection conn = null;
-    Statement st = null;
-    ResultSet rs = null;
-
+    //Connection conn = get_connection();
   }
   
   public boolean check_if_users_exist(){
@@ -70,9 +67,13 @@ public class SQLconnect {
     String time = ""+currentTime;
     return time;
   }
+
+  public void get_register_requests(){
+    get_register();
+  }
  //===============================private methods==========================
  
-  private Connection get_connection(){
+  private static Connection get_connection(){
     /**
      *the get_connection() method serves as a way to 
      *create a connection to the database, in this case db,
@@ -94,7 +95,6 @@ public class SQLconnect {
   }
   
   private boolean check_users(){
-    Connection conn = get_connection();
     ResultSet rs = null;
 
     try{
@@ -116,7 +116,6 @@ public class SQLconnect {
   }
 
   private boolean do_match(String username, String password){
-    Connection conn = get_connection();
     ResultSet rs = null;
 
     try{
@@ -140,7 +139,6 @@ public class SQLconnect {
   }
 
   private boolean check_accepted(String username){
-    Connection conn = get_connection();
     ResultSet rs = null;
 
     try{
@@ -161,13 +159,42 @@ public class SQLconnect {
       return false;
     }
   }
+
+  private void get_register(){
+    ResultSet rs = null;
+
+    try{
+      String check_query = "Select COUNT(*) as total from users where accepted = 0";
+      
+      PreparedStatement st = conn.prepareStatement(check_query);
+      rs = st.executeQuery();
+      if(rs.next()){
+        int count = rs.getInt("total");
+        if(count > 0){
+          String query = "Select * from users where accepted = 0;";
+
+          st = conn.prepareStatement(query);
+
+          rs = st.executeQuery();
+          while(rs.next()){
+            System.out.println("----------");
+            System.out.println("name: " + rs.getString("name") + ", Username: " + rs.getString("username") + ", Email: " + rs.getString("email") + ", type: " + rs.getString("type"));
+            System.out.println("----------");
+          }
+        } else {
+          System.out.println("there are no register requests at this time");
+        }
+      }
+    }catch(SQLException e){
+      e.printStackTrace();
+    }
+    
+  }
   
   //==================================change values==========================================
 
   //Maybe view if we can just change all of this to just state = !state or smth like that
   private boolean turn_offline(String username){
-    Connection conn = get_connection();
-
     try{
       String query = " update users set state = 1 where username = ?;";
       
@@ -199,8 +226,6 @@ public class SQLconnect {
   }
 
   private boolean turn_online(String username){
-    Connection conn = get_connection();
-
     try{
       String query = " update users set state = 0 where username = ?;";
       
@@ -232,8 +257,6 @@ public class SQLconnect {
   }
 
   private void change_username(String old_username, String new_username, String changer_username){
-    Connection conn = get_connection();
-
     try{
       String query = "Update users set username = ? where username = ?;";
 
@@ -264,7 +287,6 @@ public class SQLconnect {
   
   //=============================GETTERS====================================
   private User get_user(String username){
-    Connection conn = get_connection();
     ResultSet rs = null;
 
     User result = null;
@@ -306,7 +328,6 @@ public class SQLconnect {
   }
   //========================checkers=======================================
   private boolean check_username(String username){
-    Connection conn = get_connection();
     ResultSet rs = null;
 
     try{
@@ -329,7 +350,6 @@ public class SQLconnect {
   }
 
   private boolean check_NIF(int NIF){
-    Connection conn = get_connection();
     ResultSet rs = null;
     
     //ehhhhhhhhh I feel like this is bad code need to take a look at this later
@@ -383,8 +403,6 @@ public class SQLconnect {
         type = "manager";
         break;
     }
-
-    Connection conn = get_connection();
 
     try{
       int accepted = 0;
@@ -443,14 +461,14 @@ public class SQLconnect {
 
         conn.commit();
       }
+
+      conn.commit();
     }catch(SQLException e){
       e.printStackTrace();
     }
   }
 
   private void User_reg_request(String username){
-    Connection conn = get_connection();
-    
     try{
       String query = "Insert into user_reg_request (username) Values (?)";
 

@@ -1,12 +1,14 @@
 package model;
 
+import model.equipment;
+
 public class Client extends User{
-  int NIF;
-  int phone_number;
-  String address;
+  private int NIF;
+  private int phone_number;
+  private String address;
   //Client unique
-  String activity_sector;
-  String escalao;
+  private String activity_sector;
+  private String escalao;
 
   public Client(String name, String username, String password, boolean state, String email, String type){
     super(name, username, password, state, email, type);
@@ -14,5 +16,11 @@ public class Client extends User{
     
   }
 
+  private equipment add_equipment(){
     
+  }
+
+  private void executar_pedido_de_reparacao(){
+    
+  }
 }

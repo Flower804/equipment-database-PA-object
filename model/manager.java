@@ -2,7 +2,9 @@ package model;
 
 import database.SQLconnect;
 
-public class manager{
+import java.util.Scanner;
+
+public class manager extends User{
   String username = null;
 
   public manager(String name, String username, String password, boolean state, String email, String type){
@@ -10,8 +12,8 @@ public class manager{
 
   }
 
-  public void view_requests(){
-  
+  public void view_register_requests(SQLconnect db, Scanner input){
+    db.get_register_requests(); 
   }
 
 }

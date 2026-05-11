@@ -3,6 +3,9 @@ package trabalhoPA;
 //package imports
 import database.SQLconnect;
 import model.User;
+import model.Client;
+import model.Employee;
+import model.manager;
 
 //libarary imports
 import java.util.Scanner;
@@ -151,6 +154,8 @@ public class main{
     boolean running = true;
     int choice;
     
+    manager manager = new manager(user.get_name(), user.get_username(), user.get_password(), user.get_state(), user.get_email(), user.get_type());
+
     //=======================debbugging==================
     System.out.println("On manager loop");
     //===================================================
@@ -158,13 +163,17 @@ public class main{
     while(running){
       //TODO: change this two System outs to only one, and do the same on the other loops
       System.out.println("Please select what do you want to do");
-      System.out.println("1-change my info \n 9-exit");
+      System.out.println("1-change my info \n2-change users info \n3-view register requests \n9-exit");
       choice = input.nextInt();
       input.nextLine();
 
       switch(choice){
         case(1):
           break;
+        case(2):
+          break;
+        case(3):
+          manager.view_register_requests(db, input);
         case(9):
           running = false;
           break;
