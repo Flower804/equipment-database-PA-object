@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Date;
+//import java.util.Random;
 
 import database.SQLconnect; 
 
@@ -23,9 +24,22 @@ public class equipment {
     this.lote = lote;
   }
 
-  public void create_equipment(SQLconnect db, Scanner input){
-    System.out.println("");
+  public void create_equipment(SQLconnect db, Scanner input, String user_username){
+    System.out.println("What is the equipments brand");
+    String equi_brand = input.nextLine();
+
+    System.out.println("What is the equipments model");
+    String equi_model = input.nextLine();
+
+    //TODO: HOW THE HELL DO I GET THE USER TO INPUT A DATE TFFFFFFF
+    Random r = new Random();
     
-    db.insert_equipment(responsible_user, brand, model, SKU_code, manifacture_date, lote);
+    /*
+    int SKU = -1;
+    do{
+      SKU = r.nextInt(100000 - 1); //generate a random number bethwen (max - min)
+    }while(db.check_SKU(SKU))
+    */
+    db.insert_equipment(responsible_user, brand, model, manifacture_date, lote);
   }
 }

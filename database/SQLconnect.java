@@ -3,6 +3,7 @@ package database;
 import java.sql.*;
 import java.util.Scanner;
 import java.time.LocalTime;
+import java.util.Random;
 
 import model.User;
 import database.secret;
@@ -318,6 +319,30 @@ public class SQLconnect {
     return result;
   }
   
+  private bool get_amount_SKU(int SKU_to_compare){
+    Connection conn = get_connection();
+
+    ResultSet rs = null;
+
+    try{
+      String query = "Select * from Equipment where SKU_code == ?";
+
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setInt(1, SKU_to_compare);
+
+      rs.executeQuery();
+
+      if(rs.next() == true){
+        return true;
+      } else {
+        return false;
+      }
+    } catch(SQLException e){
+      System.out.println("Sorry a SQLException has occured");
+      return false;
+    }
+  }
+
   //========================methods========================================
   public void user_register(int user_type, String name, String username, String password, String email, int NIF, int Phone_number, String address, String activity_sector_, int grade, String speciality){
     Insert_user_register(user_type, name, username, password, email, NIF, Phone_number, address, activity_sector_, grade, speciality);
@@ -382,6 +407,59 @@ public class SQLconnect {
     } catch(SQLException e){
       e.printStackTrace();
       return true; //better to stop this than to just return this as accepted
+    }
+  }
+  
+  /**
+   *creates a unique SKU code (a code bethween 100000 and 1) 
+   *
+   * @return an SKU code 
+   */
+
+  private int create_SKU(){
+    int SKU = -1;
+    
+    Random r = new Random();
+
+    do{
+      SKU = r.nextInt(100000 - 1); //generate a random number bethween(max - min)
+    }while(!get_amount_SKU(SKU));
+
+    return SKU;
+  }
+
+  //-----------------------INSERTER----------------
+  
+  /**
+   * Saves in the database a equipment created by an user
+   *
+   * @param responsible_user the user that owns the equipment
+   * @param brand the brand of the equipment being saved
+   * @param model the model of the equipment being saved
+   * @param manifacture_date the date of manifacture of the equipment being saved
+   */ 
+  private void insert_equipment(String responsible_user, String brand, String model, Date manifacture_date){
+    Connetion conn = get_connection();
+    
+
+    int SKU_code = create_SKU();
+
+    try{
+      String query = "insert into Equipment (responsible_user, brand. model, SKU_code, manifacture_date) Values (?, ?, ?, ?, ?)";
+    
+      PreparedStatement st = conn.PreparedStatement(query);
+      st.setString(1, responsible_user);
+      st.setString(2, brand);
+      st.setString(3, model);
+      st.setInt(4, SKU_code);
+      st.setDate(5, manifacture_date);
+    
+      ts = st.executeUpdate();
+      
+      conn.commit();
+    } catch(SQLException e){
+      e.printStackTrace();
+      conn.rollback();
     }
   }
 

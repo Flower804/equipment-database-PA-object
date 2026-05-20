@@ -211,7 +211,7 @@ public class User{
   }
   
   private void create_equipment(SQLconnect db, Scanner input){
-    equipment.create_equipment(db, input);
+    equipment.create_equipment(db, input, );
   }
 
   private void register(SQLconnect db, Scanner input,boolean priveledged){
