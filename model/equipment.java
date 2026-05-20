@@ -2,6 +2,8 @@ package model;
 
 import java.util.Date;
 
+import database.SQLconnect; 
+
 public class equipment {
   private String responsible_user;
   private String brand;
@@ -21,8 +23,9 @@ public class equipment {
     this.lote = lote;
   }
 
-  public void create_equipment(){
-    //TODO: do questionair
-    //add to the database
+  public void create_equipment(SQLconnect db, Scanner input){
+    System.out.println("");
+    
+    db.insert_equipment(responsible_user, brand, model, SKU_code, manifacture_date, lote);
   }
 }

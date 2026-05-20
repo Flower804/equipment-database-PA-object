@@ -4,6 +4,7 @@ import database.SQLconnect;
 import model.Client; //cliente class
 import model.Employee; //funcionarios class
 import model.manager;
+import model.equipment;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -207,6 +208,10 @@ public class User{
     } else {
       System.out.println("An error has occured: There wasnt found an user");
     }
+  }
+  
+  private void create_equipment(SQLconnect db, Scanner input){
+    equipment.create_equipment(db, input);
   }
 
   private void register(SQLconnect db, Scanner input,boolean priveledged){
