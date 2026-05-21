@@ -209,10 +209,6 @@ public class User{
       System.out.println("An error has occured: There wasnt found an user");
     }
   }
-  
-  private void create_equipment(SQLconnect db, Scanner input){
-    equipment.create_equipment(db, input, );
-  }
 
   private void register(SQLconnect db, Scanner input,boolean priveledged){
     int choice = 0;

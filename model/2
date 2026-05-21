@@ -16,10 +16,8 @@ public class Client extends User{
     
   }
 
-  private void add_equipment(SQLconnect db, Scanner input){
-    equipment newEquipment = new equipment("", "", "", -1, 00000000, -1);
-
-    newEquipment.create_equipment(db, input, get_username());
+  private void add_equipment(){
+    ;
   }
 
   private void executar_pedido_de_reparacao(){

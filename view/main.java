@@ -88,15 +88,16 @@ public class main{
           String user_type = user.get_type();
           switch(user_type){
             case("client"):
-              //TODO: load client info 
-            
+              Client_loop(db, input);
+
               break;
             case("funcionario"):
-              //TODO: load funcionario info
-              
+              Employee_loop(db, input);
+
               break;
             case("manager"):
               Manager_loop(db, input);
+              
               break;
           }
         } else {
@@ -111,6 +112,8 @@ public class main{
   private static void Client_loop(SQLconnect db, Scanner input){
     boolean running = true;
     int choice;
+
+    Client client = new Client(user.get_name(), user.get_username(), user.get_password(), user.get_state(), user.get_email(), user.get_type());
 
     while(running){
       //TODO: change this two System outs to only one, and do the same on the other loops
@@ -130,8 +133,10 @@ public class main{
   }
 
   private static void Employee_loop(SQLconnect db, Scanner input){
-   boolean running = true;
+    boolean running = true;
     int choice;
+    
+    Employee employee = new Employee(user.get_name(), user.get_username(), user.get_password(), user.get_state(), user.get_email(), user.get_type());
 
     while(running){
       //TODO: change this two System outs to only one, and do the same on the other loops
