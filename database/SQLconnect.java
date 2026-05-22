@@ -60,10 +60,6 @@ public class SQLconnect {
   }
 
   public boolean turn_online(String username){
-
-  }
-
-  public boolean turn_online(String username){
     return turn_user_online(username);
   }
 
@@ -303,7 +299,7 @@ public class SQLconnect {
     }
   }
 
-  private boolean turn_offline(String username){
+  private boolean turn_user_offline(String username){
     try{
       String query = " update users set state = 0 where username = ?;";
       
