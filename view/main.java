@@ -120,12 +120,16 @@ public class main{
     while(running){
       //TODO: change this two System outs to only one, and do the same on the other loops
       System.out.println("Please select what do you want to do");
-      System.out.println("1-change my info \n 9-exit");
+      System.out.println("1-change my info \n2-add equipment \n9-exit");
       choice = input.nextInt();
       input.nextLine();
 
       switch(choice){
         case(1):
+          break;
+        case(2):
+          client.add_new_equipment(db, input);
+
           break;
         case(9):
           running = false;

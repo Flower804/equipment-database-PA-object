@@ -39,7 +39,7 @@ public class SQLconnect {
     return check_accepted(username);
   }
   
-  public void create_equipment(String responsible_user, String brand, String model, int manifacture_date){
+  public void create_equipment(String responsible_user, String brand, String model,String manifacture_date){
     insert_equipment(responsible_user, brand, model, manifacture_date);
   }
 
@@ -394,12 +394,10 @@ public class SQLconnect {
   }
   
   private boolean get_amount_SKU(int SKU_to_compare){
-    Connection conn = get_connection();
-
     ResultSet rs = null;
 
     try{
-      String query = "Select * from Equipment where SKU_code == ?";
+      String query = "Select * from Equipment where SKU_code = ?";
 
       PreparedStatement st = conn.prepareStatement(query);
       st.setInt(1, SKU_to_compare);
@@ -497,9 +495,20 @@ public class SQLconnect {
 
     do{
       SKU = r.nextInt(100000 - 1); //generate a random number bethween(max - min)
-    }while(!get_amount_SKU(SKU));
+    }while(get_amount_SKU(SKU));
 
     return SKU;
+  }
+
+  private Date string_into_Date(String date){
+    String day = date.substring(0, 2);
+    String month = date.substring(2, 4);
+    String year = date.substring(4, 8);
+
+    String date_format = year + "-" + month + "-" + day;
+
+    Date manifacture_date = Date.valueOf(date_format);
+    return manifacture_date;
   }
 
   //-----------------------INSERTER----------------
@@ -512,20 +521,20 @@ public class SQLconnect {
    * @param model the model of the equipment being saved
    * @param manifacture_date the date of manifacture of the equipment being saved
    */ 
-  private void insert_equipment(String responsible_user, String brand, String model, int int_manifacture_date){
+  private void insert_equipment(String responsible_user, String brand, String model, String string_manifacture_date){
     int SKU_code = create_SKU();
     
-    Date manifacture_date;
+    Date manifacture_date = string_into_Date(string_manifacture_date);
 
     try{
-      String query = "insert into Equipment (responsible_user, brand. model, SKU_code, manifacture_date) Values (?, ?, ?, ?, ?)";
+      String query = "insert into Equipment (responsible_user, brand, model, SKU_code, manifacture_date) Values (?, ?, ?, ?, ?)";
     
       PreparedStatement st = conn.prepareStatement(query);
       st.setString(1, responsible_user);
       st.setString(2, brand);
       st.setString(3, model);
       st.setInt(4, SKU_code);
-      //st.setDate(5, manifacture_date);
+      st.setDate(5, manifacture_date);
     
       st.executeUpdate();
       

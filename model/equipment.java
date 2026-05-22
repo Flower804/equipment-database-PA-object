@@ -31,13 +31,28 @@ public class equipment {
     System.out.println("What is the equipments model");
     String equi_model = input.nextLine();
 
-    //TODO: HOW THE HELL DO I GET THE USER TO INPUT A DATE TFFFFFFF
-    int int_manifacture_date = 0;
-
     System.out.println("Insert the lote where the equipment can be found");
     int equi_lote = input.nextInt();
     input.nextLine();
+    
+    System.out.println("Insert the date of manifacture of the equipment in the format of ddmmyyyy");
+    boolean running = true;
+    String string_manifacture_date = "";
 
-    db.create_equipment(responsible_user, brand, model, int_manifacture_date);
+    do{
+        string_manifacture_date = input.nextLine();
+    }while(!check_string_date(string_manifacture_date));
+
+    db.create_equipment(responsible_user, brand, model, string_manifacture_date);
+  }
+
+  private boolean check_string_date(String manifacture_date){
+    //I know this is stupid as hell but.... bear with me
+    if(manifacture_date.length() == 8){
+      return true;
+    } else {
+      System.out.println("Please insert a valid date in the format of ddmmyyyy");
+      return false;
+    }
   }
 }

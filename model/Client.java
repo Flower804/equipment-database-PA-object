@@ -18,6 +18,11 @@ public class Client extends User{
 
     
   }
+  
+  //accesserrsssssss
+  public void add_new_equipment(SQLconnect db, Scanner input){
+    add_equipment(db, input); 
+  }
 
   private void add_equipment(SQLconnect db, Scanner input){
     equipment newEquipment = new equipment("", "", "", -1, 00000000, -1);
