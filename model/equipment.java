@@ -43,7 +43,7 @@ public class equipment {
         string_manifacture_date = input.nextLine();
     }while(!check_string_date(string_manifacture_date));
 
-    db.create_equipment(responsible_user, brand, model, string_manifacture_date);
+    db.create_equipment(user_username, equi_brand, equi_model, string_manifacture_date);
   }
 
   private boolean check_string_date(String manifacture_date){
