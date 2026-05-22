@@ -39,6 +39,10 @@ public class SQLconnect {
     return check_accepted(username);
   }
   
+  public void create_equipment(String responsible_user, String brand, String model, int manifacture_date){
+    insert_equipment(responsible_user, brand, model, manifacture_date);
+  }
+
   public User load_user(String username){
     return get_user(username);
   }
@@ -69,8 +73,8 @@ public class SQLconnect {
     return time;
   }
 
-  public void get_register_requests(){
-    get_register();
+  public boolean get_register_requests(){
+    return get_register();
   }
  //===============================private methods==========================
  
@@ -161,7 +165,7 @@ public class SQLconnect {
     }
   }
 
-  private void get_register(){
+  private boolean get_register(){
     ResultSet rs = null;
 
     try{
@@ -182,14 +186,20 @@ public class SQLconnect {
             System.out.println("name: " + rs.getString("name") + ", Username: " + rs.getString("username") + ", Email: " + rs.getString("email") + ", type: " + rs.getString("type"));
             System.out.println("----------");
           }
+          
+          return true;
         } else {
           System.out.println("there are no register requests at this time");
+          
+          return false;
         }
       }
     }catch(SQLException e){
       e.printStackTrace();
+
+      return false;
     }
-    
+    return false;
   }
   
   //==================================change values==========================================
@@ -319,7 +329,7 @@ public class SQLconnect {
     return result;
   }
   
-  private bool get_amount_SKU(int SKU_to_compare){
+  private boolean get_amount_SKU(int SKU_to_compare){
     Connection conn = get_connection();
 
     ResultSet rs = null;
@@ -330,7 +340,7 @@ public class SQLconnect {
       PreparedStatement st = conn.prepareStatement(query);
       st.setInt(1, SKU_to_compare);
 
-      rs.executeQuery();
+      rs = st.executeQuery();
 
       if(rs.next() == true){
         return true;
@@ -438,28 +448,27 @@ public class SQLconnect {
    * @param model the model of the equipment being saved
    * @param manifacture_date the date of manifacture of the equipment being saved
    */ 
-  private void insert_equipment(String responsible_user, String brand, String model, Date manifacture_date){
-    Connetion conn = get_connection();
-    
-
+  private void insert_equipment(String responsible_user, String brand, String model, int int_manifacture_date){
     int SKU_code = create_SKU();
+    
+    Date manifacture_date;
 
     try{
       String query = "insert into Equipment (responsible_user, brand. model, SKU_code, manifacture_date) Values (?, ?, ?, ?, ?)";
     
-      PreparedStatement st = conn.PreparedStatement(query);
+      PreparedStatement st = conn.prepareStatement(query);
       st.setString(1, responsible_user);
       st.setString(2, brand);
       st.setString(3, model);
       st.setInt(4, SKU_code);
-      st.setDate(5, manifacture_date);
+      //st.setDate(5, manifacture_date);
     
-      ts = st.executeUpdate();
+      st.executeUpdate();
       
       conn.commit();
     } catch(SQLException e){
       e.printStackTrace();
-      conn.rollback();
+      //conn.rollback();
     }
   }
 

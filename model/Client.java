@@ -1,6 +1,9 @@
 package model;
 
 import model.equipment;
+import database.SQLconnect;
+
+import java.util.Scanner;
 
 public class Client extends User{
   private int NIF;

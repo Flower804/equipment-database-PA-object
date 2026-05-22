@@ -114,6 +114,8 @@ public class main{
     int choice;
 
     Client client = new Client(user.get_name(), user.get_username(), user.get_password(), user.get_state(), user.get_email(), user.get_type());
+    
+    System.out.println(client.get_username());
 
     while(running){
       //TODO: change this two System outs to only one, and do the same on the other loops
@@ -179,6 +181,8 @@ public class main{
           break;
         case(3):
           manager.view_register_requests(db, input);
+          
+          break;
         case(9):
           running = false;
           break;
