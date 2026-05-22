@@ -215,39 +215,7 @@ public class SQLconnect {
   }
   
   //==================================change values==========================================
-
-  //Maybe view if we can just change all of this to just state = !state or smth like that
-  private boolean turn_unnacepted(String username){
-    try{
-      String query = " update users set state = 0 where username = ?;";
-      
-      PreparedStatement st = conn.prepareStatement(query);
-      st.setString(1, username);
-
-      int rs = st.executeUpdate();
-      
-      conn.commit();
-
-      String notification = "insert into notification (type, username, description, is_read) Values (?, ?, ?, 1); ";
-      
-      String description = "User " + username + " was dennied access at " + get_current_time(); 
-
-      PreparedStatement st_notif = conn.prepareStatement(notification);
-      st_notif.setString(1, "accept state change: ");
-      st_notif.setString(2, username);
-      st_notif.setString(3, description);
-      
-      rs = st_notif.executeUpdate();
-
-      conn.commit();
-
-      return true;
-    }catch(SQLException e){
-      System.out.println("A SQLException has occured: " + e);
-      return false;
-    }
-  }
-
+ 
   private boolean turn_accepted(String username, String manager){
     try{
       String query = " update users set accepted = 1 where username = ?";
@@ -261,7 +229,35 @@ public class SQLconnect {
 
       String notification = "Insert into notification (type, username, description, is_read) Values (?, ?, ?, ?);";
 
-      String description = "User " + username = " has been accepted by " + manager + " at time: " + get_current_time();
+      String description = "User " + username + " has been accepted by " + manager + " at time: " + get_current_time();
+
+      PreparedStatement st_notif = conn.prepareStatement(notification);
+      st_notif.setString(1, "accept state change");
+      st_notif.setString(2, username);
+      st_notif.setString(3, description);
+
+      conn.commit();
+      return true;
+    }catch(SQLException e){
+      System.out.println("A SQLException has occured: " + e);
+      return false;
+    }
+  }
+
+  private boolean turn_unnacepted(String username, String manager){
+    try{
+      String query = " update users set accepted = 0 where username = ?";
+
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setString(1, username);
+
+      int rs = st.executeUpdate();
+
+      conn.commit();
+
+      String notification = "Insert into notification (type, username, description, is_read) Values (?, ?, ?, ?);";
+
+      String description = "User " + username + " has been denied access by " + manager + " at time: " + get_current_time();
 
       PreparedStatement st_notif = conn.prepareStatement(notification);
       st_notif.setString(1, "accept state change");
@@ -296,6 +292,37 @@ public class SQLconnect {
       st_notif.setString(2, username);
       st_notif.setString(3, description);
 
+      rs = st_notif.executeUpdate();
+
+      conn.commit();
+
+      return true;
+    }catch(SQLException e){
+      System.out.println("A SQLException has occured: " + e);
+      return false;
+    }
+  }
+
+  private boolean turn_offline(String username){
+    try{
+      String query = " update users set state = 0 where username = ?;";
+      
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setString(1, username);
+
+      int rs = st.executeUpdate();
+      
+      conn.commit();
+
+      String notification = "insert into notification (type, username, description, is_read) Values (?, ?, ?, 1); ";
+      
+      String description = "User " + username + " has logged off at time: " + get_current_time(); 
+
+      PreparedStatement st_notif = conn.prepareStatement(notification);
+      st_notif.setString(1, "log off");
+      st_notif.setString(2, username);
+      st_notif.setString(3, description);
+      
       rs = st_notif.executeUpdate();
 
       conn.commit();
