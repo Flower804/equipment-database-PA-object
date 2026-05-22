@@ -241,6 +241,7 @@ public class SQLconnect {
   }
 
   private boolean turn_unnacepted(String username, String manager){
+    //TODO: fix this
     try{
       String query = " update users set accepted = 0 where username = ?";
 
