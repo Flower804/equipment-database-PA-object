@@ -59,12 +59,24 @@ public class SQLconnect {
     change_username(old_username, new_username, asker_username);
   }
 
-  public void turn_user_online(String username){
-    turn_online(username);
+  public boolean turn_online(String username){
+
   }
 
-  public void turn_user_offline(String username){
-    turn_offline(username);
+  public boolean turn_online(String username){
+    return turn_user_online(username);
+  }
+
+  public boolean turn_offline(String username){
+    return turn_user_offline(username);
+  }
+
+  public boolean accept_user(String username, String manager){
+    return turn_accepted(username, manager);
+  }
+  
+  public boolean deny_user(String username, String manager){
+    return turn_unnacepted(username, manager);
   }
 
   private String get_current_time(){
@@ -205,9 +217,9 @@ public class SQLconnect {
   //==================================change values==========================================
 
   //Maybe view if we can just change all of this to just state = !state or smth like that
-  private boolean turn_offline(String username){
+  private boolean turn_unnacepted(String username){
     try{
-      String query = " update users set state = 1 where username = ?;";
+      String query = " update users set state = 0 where username = ?;";
       
       PreparedStatement st = conn.prepareStatement(query);
       st.setString(1, username);
@@ -218,10 +230,10 @@ public class SQLconnect {
 
       String notification = "insert into notification (type, username, description, is_read) Values (?, ?, ?, 1); ";
       
-      String description = "User " + username + " has logged off at time: " + get_current_time(); 
+      String description = "User " + username + " was dennied access at " + get_current_time(); 
 
       PreparedStatement st_notif = conn.prepareStatement(notification);
-      st_notif.setString(1, "log off");
+      st_notif.setString(1, "accept state change: ");
       st_notif.setString(2, username);
       st_notif.setString(3, description);
       
@@ -236,9 +248,37 @@ public class SQLconnect {
     }
   }
 
-  private boolean turn_online(String username){
+  private boolean turn_accepted(String username, String manager){
     try{
-      String query = " update users set state = 0 where username = ?;";
+      String query = " update users set accepted = 1 where username = ?";
+
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setString(1, username);
+
+      int rs = st.executeUpdate();
+
+      conn.commit();
+
+      String notification = "Insert into notification (type, username, description, is_read) Values (?, ?, ?, ?);";
+
+      String description = "User " + username = " has been accepted by " + manager + " at time: " + get_current_time();
+
+      PreparedStatement st_notif = conn.prepareStatement(notification);
+      st_notif.setString(1, "accept state change");
+      st_notif.setString(2, username);
+      st_notif.setString(3, description);
+
+      conn.commit();
+      return true;
+    }catch(SQLException e){
+      System.out.println("A SQLException has occured: " + e);
+      return false;
+    }
+  }
+
+  private boolean turn_user_online(String username){
+    try{
+      String query = " update users set state = 1 where username = ?;";
       
       PreparedStatement st = conn.prepareStatement(query);
       st.setString(1, username);
@@ -249,7 +289,7 @@ public class SQLconnect {
 
       String notification = "Insert into notification (type, username, description, is_read) Values (?, ?, ?, 1);";
 
-      String description = "User " + username + " has loggen on at time: " + get_current_time();
+      String description = "User " + username + " has logged on at time " + get_current_time();
 
       PreparedStatement st_notif = conn.prepareStatement(notification);
       st_notif.setString(1, "log on");

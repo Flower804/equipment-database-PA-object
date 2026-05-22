@@ -48,7 +48,7 @@ public class main{
   }
   
   private static void on_exit(String username){
-    db.turn_user_offline(username);
+    db.turn_offline(username);
 
     System.out.println("Adeus " + user.get_username());
     System.exit(0);
@@ -81,7 +81,7 @@ public class main{
         System.out.println("user found");
         if(db.check_if_user_accepted(username)){
           user.set_user(db ,username);
-          db.turn_user_online(username);
+          db.turn_online(username);
           running = false;
           System.out.println("bem-vindo " + user.get_username());
           

@@ -17,7 +17,7 @@ public class manager extends User{
       boolean running = true;
 
       while(running){
-        System.out.println("Do you want to accept any Users? 1-yes 2-no");
+        System.out.println("Do you want to accept/deny any Users? 1-accept 2-deny 3-no");
 
         int choice = input.nextInt();
         input.nextLine();
@@ -26,10 +26,14 @@ public class manager extends User{
           case(1):
             accept_user(db, input);
 
-            running = false;
             break;
           case(2):
+            //other htingy
+
+            break;
+          case(3):
             running = false;
+
             break;
           default:
             System.out.println("Sorry that was an invalid choice");
@@ -39,6 +43,28 @@ public class manager extends User{
   }
 
   private void accept_user(SQLconnect db, Scanner input){
-    ;
+    db.get_register_requests();
+    System.out.println("Please write the Username of the User you want to accept: ");
+    
+    String user_to_accept = input.nextLine();
+    
+    if(db.accept_user(user_to_accept, get_username())){
+      System.out.println("User accepted succesfully");
+    } else {
+      System.out.println("I'm sorry the user wasnt found");
+    }
+  }
+
+  private void denny_user(SQLconnect db, Scanner input){
+    db.get_register_requests();
+    System.out.println("Please write the Username of the User you want to denny: ");
+
+    String user_to_denny = input.nextLine();
+
+    if(db.deny_user(username, get_username())){
+      System.out.println("User denied succesfully");
+    } else {
+      System.out.println("I'm sorry the user wasnt found");
+    }
   }
 }
