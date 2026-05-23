@@ -101,7 +101,11 @@ public class main{
               break;
           }
         } else {
-          System.out.println("Sorry, you still havent been accepted by an user");
+          if(db.check_if_user_denied(username)){
+            ;
+          } else {
+            System.out.println("Sorry, you still havent been accepted by an user");
+          }
         }
       } else {
         System.out.println("no match found, please try again");

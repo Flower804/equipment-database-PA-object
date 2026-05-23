@@ -38,6 +38,10 @@ public class SQLconnect {
   public boolean check_if_user_accepted(String username){
     return check_accepted(username);
   }
+
+  public boolean check_if_user_denied(String username){
+    return check_denied(username);
+  }
   
   public void create_equipment(String responsible_user, String brand, String model,String manifacture_date){
     insert_equipment(responsible_user, brand, model, manifacture_date);
@@ -164,6 +168,35 @@ public class SQLconnect {
 
       if(rs.next() == true){
         return true; //the user was accepted by manager 
+      } else {
+        return false;
+      }
+    }catch(SQLException e){
+      e.printStackTrace();
+      return false;
+    }
+  }
+
+  private boolean check_denied(String username){
+    ResultSet rs = null;
+
+    try{
+      String query = "Select * from denied where username = ?;";
+
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setString(1, username);
+
+      rs = st.executeQuery();
+
+      if(rs.next() == true){
+        String description_query = "Select description from denied where username = ?;";
+
+        PreparedStatement st_desctiption = conn.prepareStatement(description_query);
+        st.setString(1, username);
+
+        rs = st.executeQuery();
+
+        return true;
       } else {
         return false;
       }
