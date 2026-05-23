@@ -195,6 +195,9 @@ public class SQLconnect {
         st.setString(1, username);
 
         rs = st.executeQuery();
+        
+        System.out.println("I'm sorry but your registration request has been denied");
+        System.out.println("reason: " + rs.getString("reason"));
 
         return true;
       } else {
