@@ -57,13 +57,14 @@ public class manager extends User{
 
   private void denny_user(SQLconnect db, Scanner input){
     //TODO: fix this
+    //still dont know whats wrong with it tbh
     db.get_register_requests();
     System.out.println("Please write the Username of the User you want to denny: ");
 
     String user_to_denny = input.nextLine();
 
     if(db.deny_user(username, get_username())){
-      System.out.println("User denied succesfully");
+      System.out.println("user denied succesfully with reason: "); //TODO add reason here
     } else {
       System.out.println("I'm sorry the user wasnt found");
     }

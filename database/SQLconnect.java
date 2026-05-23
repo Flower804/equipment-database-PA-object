@@ -75,8 +75,8 @@ public class SQLconnect {
     return turn_accepted(username, manager);
   }
   
-  public boolean deny_user(String username, String manager){
-    return turn_unnacepted(username, manager);
+  public boolean deny_user(String username, String manager, Scanner input){
+    return turn_unnacepted(username, manager, input);
   }
 
   private String get_current_time(){
@@ -197,7 +197,7 @@ public class SQLconnect {
         rs = st.executeQuery();
         
         System.out.println("I'm sorry but your registration request has been denied");
-        System.out.println("reason: " + rs.getString("reason"));
+        System.out.println("reason: " + rs.getString("description"));
 
         return true;
       } else {
@@ -245,6 +245,27 @@ public class SQLconnect {
     }
     return false;
   }
+
+  private boolean denying_process(String username, Scanner input){
+    String reason = "";
+    System.out.println("Please insert the reason for rejecting user " + username);
+
+    reason = input.nextLine();
+
+    try{
+      String query = "Insert into denied (username, description) Values (?, ?);";
+
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setString(1, username);
+      st.setString(2, reason);
+
+      conn.commit();
+      return true;
+    }catch(SQLException e){
+      System.out.println("A SQLException has occures: " + e);
+      return false;
+    }
+  }
   
   //==================================change values==========================================
  
@@ -276,31 +297,36 @@ public class SQLconnect {
     }
   }
 
-  private boolean turn_unnacepted(String username, String manager){
-    //TODO: fix this
-    try{
-      String query = " update users set accepted = 0 where username = ?";
+  private boolean turn_unnacepted(String username, String manager, Scanner input){
+    if(denying_process(username, input)){
 
-      PreparedStatement st = conn.prepareStatement(query);
-      st.setString(1, username);
+      //TODO: fix this
+      try{
+        String query = " update users set accepted = 0 where username = ?";
 
-      int rs = st.executeUpdate();
+        PreparedStatement st = conn.prepareStatement(query);
+        st.setString(1, username);
 
-      conn.commit();
+        int rs = st.executeUpdate();
 
-      String notification = "Insert into notification (type, username, description, is_read) Values (?, ?, ?, ?);";
+        conn.commit();
 
-      String description = "User " + username + " has been denied access by " + manager + " at time: " + get_current_time();
+        String notification = "Insert into notification (type, username, description, is_read) Values (?, ?, ?, ?);";
 
-      PreparedStatement st_notif = conn.prepareStatement(notification);
-      st_notif.setString(1, "accept state change");
-      st_notif.setString(2, username);
-      st_notif.setString(3, description);
+        String description = "User " + username + " has been denied access by " + manager + " at time: " + get_current_time();
 
-      conn.commit();
-      return true;
-    }catch(SQLException e){
-      System.out.println("A SQLException has occured: " + e);
+        PreparedStatement st_notif = conn.prepareStatement(notification);
+        st_notif.setString(1, "accept state change");
+        st_notif.setString(2, username);
+        st_notif.setString(3, description);
+
+        conn.commit();
+        return true;
+      }catch(SQLException e){
+        System.out.println("A SQLException has occured: " + e);
+        return false;
+      }
+    } else {
       return false;
     }
   }
