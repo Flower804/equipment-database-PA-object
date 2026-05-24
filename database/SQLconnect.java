@@ -88,6 +88,11 @@ public class SQLconnect {
   public boolean get_register_requests(){
     return get_register();
   }
+
+  public int get_number_of_repairs(){
+    return number_repairs();
+  }
+
  //===============================private methods==========================
  
   private static Connection get_connection(){
@@ -125,7 +130,7 @@ public class SQLconnect {
       } else {
         return false;
       }
-      
+
     } catch(SQLException e){
       e.printStackTrace();
       return false;
@@ -207,6 +212,28 @@ public class SQLconnect {
       e.printStackTrace();
       return false;
     }
+  }
+  
+  private int number_repairs(){
+    ResultSet rs = null;
+    
+    try{
+      String query = "Select count(*) as total from equipment_repair;";
+      
+      PreparedStatement st = conn.prepareStatement(query);
+
+      rs = st.executeQuery();
+      
+      if(rs.next()){
+        return rs.getInt("total");
+      }
+    }catch(SQLException e){
+      System.out.println("Sorry an SQLException has occured ");
+      e.printStackTrace();
+      return 0;
+    }
+
+    return 0;
   }
 
   private boolean get_register(){
