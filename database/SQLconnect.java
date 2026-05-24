@@ -258,6 +258,8 @@ public class SQLconnect {
       PreparedStatement st = conn.prepareStatement(query);
       st.setString(1, username);
       st.setString(2, reason);
+      
+      st.executeUpdate();
 
       conn.commit();
       return true;
@@ -288,6 +290,8 @@ public class SQLconnect {
       st_notif.setString(1, "accept state change");
       st_notif.setString(2, username);
       st_notif.setString(3, description);
+      
+      st_notif.executeUpdate();
 
       conn.commit();
       return true;
@@ -319,6 +323,8 @@ public class SQLconnect {
         st_notif.setString(1, "accept state change");
         st_notif.setString(2, username);
         st_notif.setString(3, description);
+        
+        st_notif.executeUpdate();
 
         conn.commit();
         return true;

@@ -28,7 +28,7 @@ public class manager extends User{
 
             break;
           case(2):
-            //other htingy
+            denny_user(db, input);
 
             break;
           case(3):
@@ -63,7 +63,7 @@ public class manager extends User{
 
     String user_to_denny = input.nextLine();
 
-    if(db.deny_user(username, get_username())){
+    if(db.deny_user(user_to_denny, get_username(), input)){
       System.out.println("user denied succesfully with reason: "); //TODO add reason here
     } else {
       System.out.println("I'm sorry the user wasnt found");
