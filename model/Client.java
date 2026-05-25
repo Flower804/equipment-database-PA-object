@@ -20,8 +20,13 @@ public class Client extends User{
   }
   
   //accesserrsssssss
+
   public void add_new_equipment(SQLconnect db, Scanner input){
     add_equipment(db, input); 
+  }
+  
+  public void repair_request(SQLconnect db, Scanner input){
+    execute_repair_request(db, input);
   }
 
   private void add_equipment(SQLconnect db, Scanner input){
@@ -30,7 +35,9 @@ public class Client extends User{
     newEquipment.create_equipment(db, input, get_username());
   }
 
-  private void executar_pedido_de_reparacao(){
-    ;
+  private void execute_repair_request(SQLconnect db, Scanner input){
+    if(db.check_existing_equipments(get_username())){
+      System.out.println("Please insert the SKU code of the equipment you want to repair");
+    }
   }
 }

@@ -25,14 +25,20 @@ public class repair_request{
     this.responsible_user = responsible_user;
     this.SKU_code = SKU_code;
   }
+  
+  public int get_SKU_code(){
+    return SKU_code;
+  }
+  
+  public String get_responsible_user(){
+    return responsible_user;
+  }
 
   public void create_request(SQLconnect db, Scanner input){
-    SimpleDateFormat ft = new SimpleDateFormat("dd-mm-yyyy");
-    submission_date = ft.format(new Date());
-
-     
+    int repair_code = generate_repair_code(db);
 
     accepted = false;
+    db.save_request(repair_code, get_SKU_code(), get_responsible_user());
   }
 
   public void accept_request(String Employee_username){
@@ -43,12 +49,15 @@ public class repair_request{
   }
 
   private int generate_repair_code(SQLconnect db){
-    //Uma reparação é caracterizada por um número de reparação que é composto por um número sequencial
-    //(a cada pedido o número incrementa), seguido da data no formato AAAAMMDDHHMMSS.
-    //Por exemplo, se já ocorreram 95 pedidos até ao momento, e às 15h33m10s do dia 19 de Fevereiro de 2026
-    //surge um novo pedido, o mesmo terá o número 9620260219153310.
-    
-    int repairs;
+    SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 
+    int repairs = db.get_number_of_repairs();
+    String data = ft.format(new Date());
+    
+    String string_repair = String.valueOf(repairs);
+    
+    String string_repair_code = "" + string_repair + data; 
+    
+    return Integer.parseInt(string_repair_code);
   }
 }

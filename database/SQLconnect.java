@@ -35,6 +35,10 @@ public class SQLconnect {
     return result;
   }
 
+  public boolean check_existing_equipments(String username){
+    return check_equipments(username);
+  }
+
   public boolean check_if_user_accepted(String username){
     return check_accepted(username);
   }
@@ -91,6 +95,10 @@ public class SQLconnect {
 
   public int get_number_of_repairs(){
     return number_repairs();
+  }
+
+  public void save_request(int repair_code, int SKU_code, String responsible_user){
+    save_repair_request(repair_code, SKU_code, responsible_user);
   }
 
  //===============================private methods==========================
@@ -295,7 +303,7 @@ public class SQLconnect {
       return false;
     }
   }
-  
+ 
   //==================================change values==========================================
  
   private boolean turn_accepted(String username, String manager){
@@ -509,6 +517,24 @@ public class SQLconnect {
       return false;
     }
   }
+  
+  private void save_repair_request(int repair_code, int SKU_code, String responsible_user){
+    try{
+      String query = "Insert into equipment_repair(repair_code, SKU_code, request_submission_date, responsible_user, accepted) Values (?, ?, curdate(), ?, 0);";
+    
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setInt(1, repair_code);
+      st.setInt(2, SKU_code);
+      st.setString(3, responsible_user);
+
+      st.executeUpdate();
+
+      conn.commit();
+    }catch(SQLException e){
+      System.out.println("I'm sorry but a SQLException has occures ");
+      e.printStackTrace();
+    }
+  }
 
   //========================methods========================================
   public void user_register(int user_type, String name, String username, String password, String email, int NIF, int Phone_number, String address, String activity_sector_, int grade, String speciality){
@@ -604,6 +630,31 @@ public class SQLconnect {
 
     Date manifacture_date = Date.valueOf(date_format);
     return manifacture_date;
+  }
+
+  private boolean check_equipments(String username){ 
+    ResultSet rs = null; 
+    boolean found = false;
+
+    try{
+      String query = "Select brand, model, SKU_code from Equipment where responsible_user = ?;";
+
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setString(1, username);
+      
+      rs = st.executeQuery();
+
+      if(rs.next() == true){
+        found = true;
+        System.out.println("brand: " + rs.getString("brand") + " : model: " + rs.getString("model") + "SKU code: " + rs.getInt("SKU_code"));
+      }
+
+    }catch(SQLException e){
+      System.out.println("Sorry a SQLException has occured ");
+      e.printStackTrace();
+    }
+
+    return found;
   }
 
   //-----------------------INSERTER----------------
