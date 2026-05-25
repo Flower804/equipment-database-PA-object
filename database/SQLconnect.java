@@ -25,7 +25,11 @@ public class SQLconnect {
 
     //Connection conn = get_connection();
   }
-  
+    
+  public boolean check_SKU_code(int SKU_code){
+    return get_amount_SKU(SKU_code);
+  }
+
   public boolean check_if_users_exist(){
     return check_users();
   }
@@ -97,8 +101,8 @@ public class SQLconnect {
     return number_repairs();
   }
 
-  public void save_request(int repair_code, int SKU_code, String responsible_user){
-    save_repair_request(repair_code, SKU_code, responsible_user);
+  public boolean save_request(float repair_code, int SKU_code, String responsible_user){
+    return save_repair_request(repair_code, SKU_code, responsible_user);
   }
 
  //===============================private methods==========================
@@ -123,7 +127,7 @@ public class SQLconnect {
     System.out.println("Connection to the database has failed");
     return null;
   }
-  
+
   private boolean check_users(){
     ResultSet rs = null;
 
@@ -518,21 +522,23 @@ public class SQLconnect {
     }
   }
   
-  private void save_repair_request(int repair_code, int SKU_code, String responsible_user){
+  private boolean save_repair_request(float repair_code, int SKU_code, String responsible_user){
     try{
       String query = "Insert into equipment_repair(repair_code, SKU_code, request_submission_date, responsible_user, accepted) Values (?, ?, curdate(), ?, 0);";
     
       PreparedStatement st = conn.prepareStatement(query);
-      st.setInt(1, repair_code);
+      st.setFloat(1, repair_code);
       st.setInt(2, SKU_code);
       st.setString(3, responsible_user);
 
       st.executeUpdate();
 
       conn.commit();
+      return true;
     }catch(SQLException e){
       System.out.println("I'm sorry but a SQLException has occures ");
       e.printStackTrace();
+      return false;
     }
   }
 

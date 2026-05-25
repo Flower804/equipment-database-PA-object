@@ -12,7 +12,7 @@ public class repair_request{
 
   private String responsible_user;
   private int SKU_code;
-  private int repair_code;
+  private long repair_code;
   private String submission_date;
   private Date repair_date;
   private String assigned_Employee;
@@ -35,10 +35,12 @@ public class repair_request{
   }
 
   public void create_request(SQLconnect db, Scanner input){
-    int repair_code = generate_repair_code(db);
+    float repair_code = generate_repair_code(db);
 
     accepted = false;
-    db.save_request(repair_code, get_SKU_code(), get_responsible_user());
+    if(db.save_request(repair_code, get_SKU_code(), get_responsible_user())){
+      System.out.println("Repair request created succesfully");
+    }
   }
 
   public void accept_request(String Employee_username){
@@ -48,16 +50,16 @@ public class repair_request{
     
   }
 
-  private int generate_repair_code(SQLconnect db){
-    SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+  private float generate_repair_code(SQLconnect db){
+    SimpleDateFormat ft = new SimpleDateFormat("yyyyMMddHHmmss");
 
-    int repairs = db.get_number_of_repairs();
+    int repairs = db.get_number_of_repairs() + 1;
     String data = ft.format(new Date());
     
     String string_repair = String.valueOf(repairs);
     
     String string_repair_code = "" + string_repair + data; 
     
-    return Integer.parseInt(string_repair_code);
+    return Float.parseFloat(string_repair_code);
   }
 }

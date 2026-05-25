@@ -1,6 +1,7 @@
 package model;
 
 import model.equipment;
+import model.repair_request;
 import database.SQLconnect;
 
 import java.util.Scanner;
@@ -37,7 +38,22 @@ public class Client extends User{
 
   private void execute_repair_request(SQLconnect db, Scanner input){
     if(db.check_existing_equipments(get_username())){
-      System.out.println("Please insert the SKU code of the equipment you want to repair");
+      boolean running = true;
+        
+      while(running){
+        System.out.println("Please insert the SKU code of the equipment you want to repair, or insert 9 to exit");
+        int SKU_code_intended = input.nextInt();
+        input.nextLine();
+
+        if(SKU_code_intended == 9){
+          running = false;
+        }else if(db.check_SKU_code(SKU_code_intended)){
+          running = false;
+          
+          repair_request request = new repair_request(get_username(), SKU_code_intended);
+          request.create_request(db, input);
+        }
+      }
     }
   }
 }
