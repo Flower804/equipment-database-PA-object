@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.Scanner;
 import java.time.LocalTime;
 import java.util.Random;
+import java.util.ArrayList;
 
 import model.User;
 import database.secret;
@@ -54,6 +55,10 @@ public class SQLconnect {
   public void create_equipment(String responsible_user, String brand, String model,String manifacture_date){
     insert_equipment(responsible_user, brand, model, manifacture_date);
   }
+  
+  public void change_my_info(String where, String username, String what, String content){
+    change_info(where, username, what, content);
+  }
 
   public User load_user(String username){
     return get_user(username);
@@ -103,6 +108,10 @@ public class SQLconnect {
 
   public boolean save_request(float repair_code, int SKU_code, String responsible_user){
     return save_repair_request(repair_code, SKU_code, responsible_user);
+  }
+
+  public ArrayList<User> list_users_by_name(String filter, int offset){
+    return list_all_users(filter, offset);
   }
 
  //===============================private methods==========================
@@ -524,7 +533,7 @@ public class SQLconnect {
   
   private boolean save_repair_request(float repair_code, int SKU_code, String responsible_user){
     try{
-      String query = "Insert into equipment_repair(repair_code, SKU_code, request_submission_date, responsible_user, accepted) Values (?, ?, curdate(), ?, 0);";
+      String query = "Insert into equipment_repair(repair_code, SKU_code, request_submission_date, responsible_user, state) Values (?, ?, curdate(), ?, 0);";
     
       PreparedStatement st = conn.prepareStatement(query);
       st.setFloat(1, repair_code);
@@ -807,4 +816,50 @@ public class SQLconnect {
       e.printStackTrace();
     }
   }
+  
+  private void change_info(String where, String username, String what, String content){
+    try{
+      String query = "update ? set ? = ? where username - ?;";
+
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setString(1, where);
+      st.setString(2, what);
+      st.setString(3, content);
+      st.setString(4, username);
+
+      conn.commit();
+
+      System.out.println("Your change was made succesfully");
+    }catch(SQLException e){
+      System.out.println("Im sorry but a SQLException has occured");
+      e.printStackTrace();
+    }
+  }
+
+  //listings
+  private ArrayList<User> list_all_users(String filter, int offset){
+    ResultSet rs = null;
+    ArrayList<User> users = new ArrayList<User>();
+
+    try{
+      String query = "Select * from users where name like ? order by name ASC limit 10 offset ?;";
+    
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setString(1, filter);
+      st.setInt(2, offset);
+      
+      rs = st.executeQuery();
+
+      while(rs.next()){
+        User u = new User(rs.getString("name"), rs.getString("username"), rs.getString("password"), rs.getBoolean("state"), rs.getString("email"), rs.getString("type"));
+      
+        users.add(u);
+      }
+    }catch(SQLException e){
+      System.out.println("Sorry an SQLException has occured: ");
+      e.printStackTrace();
+    }
+
+    return users;
+  } 
 } 

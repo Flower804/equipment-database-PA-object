@@ -56,8 +56,6 @@ public class manager extends User{
   }
 
   private void denny_user(SQLconnect db, Scanner input){
-    //TODO: fix this
-    //still dont know whats wrong with it tbh
     db.get_register_requests();
     System.out.println("Please write the Username of the User you want to denny: ");
 

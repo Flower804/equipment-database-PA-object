@@ -154,13 +154,15 @@ public class main{
 
     while(running){
       //TODO: change this two System outs to only one, and do the same on the other loops
-      System.out.println("Please select what do you want to do");
-      System.out.println("1-change my info \n 9-exit");
+      //and for the love of god finish this, its way to late for this jesus
+      System.out.println("Please select what do you want to do\n1-change my info \n9-exit");
       choice = input.nextInt();
       input.nextLine();
 
       switch(choice){
         case(1):
+          employee.change_my_info(db, input);
+
           break;
         case(9):
           running = false;

@@ -16,7 +16,7 @@ public class repair_request{
   private String submission_date;
   private Date repair_date;
   private String assigned_Employee;
-  private boolean accepted;
+  private int state;
 
   //TODO: think how to apply tempo decorrido here
   private long repair_cost;
@@ -37,7 +37,7 @@ public class repair_request{
   public void create_request(SQLconnect db, Scanner input){
     float repair_code = generate_repair_code(db);
 
-    accepted = false;
+    state = 0;
     if(db.save_request(repair_code, get_SKU_code(), get_responsible_user())){
       System.out.println("Repair request created succesfully");
     }
@@ -45,7 +45,7 @@ public class repair_request{
 
   public void accept_request(String Employee_username){
     assigned_Employee = Employee_username;
-    accepted = true;
+    state = 1;
 
     
   }
