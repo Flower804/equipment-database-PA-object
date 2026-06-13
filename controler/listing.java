@@ -33,11 +33,11 @@ public class listing{
    *
    * @return the filter form of the leters that the user is searching for
    */
-  private String create_filter(){
+  private String create_filter(Scanner input){
     String filter;
     
     System.out.println("Please write what you want in the filter");
-    filter = input.nextLint();
+    filter = input.nextLine();
 
     String final_filter = "%" + filter + "%";
     return final_filter;
@@ -58,7 +58,7 @@ public class listing{
       int offset = 0;
 
       while(running){
-        ArrayList<User> = db.list_users_by_name(filter, offset);
+        ArrayList<User> users_by_name = db.list_users_by_name(filter, offset);
 
         System.out.println("1- next page, 2- filter, 3- exit");
         choice = input.nextInt();
@@ -70,7 +70,7 @@ public class listing{
 
             break;
           case(2):
-            filter = createfilter();
+            filter = create_filter(input);
 
             break;
           case(3):

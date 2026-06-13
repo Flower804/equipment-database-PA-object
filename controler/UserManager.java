@@ -1,6 +1,6 @@
 package controler;
 
-public class UserManger{
+public class UserManager{
   
   public void registerUser(){
     //validate data
