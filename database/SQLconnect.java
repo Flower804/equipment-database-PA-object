@@ -946,7 +946,13 @@ public class SQLconnect {
     }
   }
 
-  //listings
+  //listings-----------------------------------------------------------
+  /**Lists all the existing users in the database by their name
+   *
+   *@param filter a filter to include the names of the users that meet that filter
+   *@param offset the offset of the position of the users are shown
+   *@return an ArrayList of the name of the users that meet the criteria of the offset and filter
+   */
   private ArrayList<User> list_all_users(String filter, int offset){
     ResultSet rs = null;
     ArrayList<User> users = new ArrayList<User>();
@@ -972,4 +978,58 @@ public class SQLconnect {
 
     return users;
   } 
+  
+  /**
+   *
+   *@param search_type search type must be 1 for "search by name", 2 for "search by username" or 3 for "search by type" 
+   *@param filter a filter to include the names of the users that meet that filter
+   *@param offset the offset of the position of the users are shown
+   *@return returns an ArrayList of the resulting users
+   */
+  private ArrayList<User> list_all(int search_type ,String filter ,int offset){
+    ResultSet rs;
+    ArrayList<User> users = new ArrayList<User>();
+
+    String query;
+
+    switch(search_type){
+      case(1):
+        query = "Select * from users where name like ? limit 10 offset ?;";
+
+        break;
+      case(2):
+        query = "Select * from users where username like ? limit 10 offset ?;";
+
+        break;
+      case(3):
+        query = "Select * from users where type = ? limit 10 offset ?;";
+
+        break;
+      default:
+        System.out.println("The search type is invalid");
+        
+        return null;
+    }
+    
+    try{
+      PreparedStatement st = conn.prepareStatement(query);
+      st.setString(1, filter);
+      st.setInt(2, offset);
+
+      rs = st.executeQuery();
+
+      while(rs.next()){
+        User u = new User(rs.getString("name"), rs.getString("username"), rs.getString("password"), rs.getBoolean("state"), rs.getString("email"), rs.getString("type"));
+
+        users.add(u);
+      }
+      return users;
+    }catch(SQLException e){
+      System.out.println("Sorry a SQLException has occured: ");
+      e.printStackTrace();
+
+      return null;
+    }
+  }
+
 } 
