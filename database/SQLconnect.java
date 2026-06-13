@@ -115,7 +115,13 @@ public class SQLconnect {
   }
 
  //===============================private methods==========================
- 
+  
+  //TODO: dont forget to change this before handing in the assignment, so that it 
+  //doesnt have to use the secret
+
+  /**Establishes the connection with the database
+   *
+   */ 
   private static Connection get_connection(){
     /**
      *the get_connection() method serves as a way to 
@@ -136,7 +142,11 @@ public class SQLconnect {
     System.out.println("Connection to the database has failed");
     return null;
   }
-
+  
+  /**Checks if any users exists in the database
+   *
+   * @return true if there exists users or false if dont
+   */
   private boolean check_users(){
     ResultSet rs = null;
 
@@ -157,7 +167,13 @@ public class SQLconnect {
       return false;
     } 
   }
-
+  
+  /**checks if the given username and password coincide with any existing entry on the database
+   * 
+   * @param username the username of the user trying to be matched with the given password 
+   * @param password the password of the user trying to be matched with the given username
+   * @return true if theres a match or false if not
+   */ 
   private boolean do_match(String username, String password){
     ResultSet rs = null;
 
@@ -180,7 +196,12 @@ public class SQLconnect {
       return false;
     }
   }
-
+  
+  /**Checks if a username from a user has been accepted by a manager
+   *
+   * @param username the username of the user that is being checked if it has been accepted
+   * @return true if the user has been accepted, and false if not
+   */
   private boolean check_accepted(String username){
     ResultSet rs = null;
 
@@ -202,7 +223,13 @@ public class SQLconnect {
       return false;
     }
   }
-
+  
+  /**Checks if an user has been denied by checking their username on the denied table
+   * printing the reason for the deniel if found
+   *
+   * @param username the username of the user that is being checked if it has been denied
+   * @return true if the username is found on the table, or false if the contrary
+   */
   private boolean check_denied(String username){
     ResultSet rs = null;
 
@@ -235,6 +262,10 @@ public class SQLconnect {
     }
   }
   
+  /**Gets the current number of existing(active and incative) repairs on the repairs database
+   *
+   * @return the current number of existing repairs in the database
+   */
   private int number_repairs(){
     ResultSet rs = null;
     
@@ -256,7 +287,11 @@ public class SQLconnect {
 
     return 0;
   }
-
+  
+  /**Shows all the users in the users table, joint with their information(name, username, email and type)
+   *
+   *@return true if there exists users in the register, false if dont
+   */ 
   private boolean get_register(){
     ResultSet rs = null;
 
@@ -294,6 +329,13 @@ public class SQLconnect {
     return false;
   }
 
+  /**Gets the reason to deny a user and adds the username and the reason to the denied database
+   *
+   *@param username the username of the user to be rejected
+   *@param input the Scanner object being used for inputs from the user
+   *
+   * @return true if the user is denied succesfully false if not
+   */
   private boolean denying_process(String username, Scanner input){
     String reason = "";
     System.out.println("Please insert the reason for rejecting user " + username);
@@ -318,7 +360,14 @@ public class SQLconnect {
   }
  
   //==================================change values==========================================
- 
+  
+  /**Accepts a user into the database, storing also which manager accepted the respective user
+   *
+   *@param username the username of the user being accepted
+   *@param input the Scanner object being used for inputs from the user
+   *
+   *@return returns true if the user is accepted succesfully, and false if otherwyse
+   */ 
   private boolean turn_accepted(String username, String manager){
     try{
       String query = " update users set accepted = 1 where username = ?";
@@ -348,11 +397,17 @@ public class SQLconnect {
       return false;
     }
   }
-
+  
+  /**denies a user, stopping them from being able to log in
+   *
+   *@param username the username of the user to be denied
+   *@param manager the username of the manager that is denying the respective user
+   *@param input the Scanner object being used for inputs from the user
+   *
+   *@return returns true if denied succesfully, false if else
+   */
   private boolean turn_unnacepted(String username, String manager, Scanner input){
     if(denying_process(username, input)){
-
-      //TODO: fix this
       try{
         String query = " update users set accepted = 0 where username = ?";
 
@@ -384,7 +439,13 @@ public class SQLconnect {
       return false;
     }
   }
-
+  
+  /**turns a user online
+   *
+   *@param username the username of the user to turn online
+   *
+   *@return true if turned online succesfully and false if else
+   */
   private boolean turn_user_online(String username){
     try{
       String query = " update users set state = 1 where username = ?;";
@@ -415,7 +476,13 @@ public class SQLconnect {
       return false;
     }
   }
-
+  
+  /**turns a user offline
+   *
+   *@param username the username of the user to be turned offline
+   *
+   *@return true if the user has been turned offline succesfully, returns false if else
+   */ 
   private boolean turn_user_offline(String username){
     try{
       String query = " update users set state = 0 where username = ?;";
@@ -447,6 +514,12 @@ public class SQLconnect {
     }
   }
 
+  /**Changes the username of a User, taking into account the username of the changer
+   *
+   *@param old_username the current/old username of the user which will have their username changed
+   *@param new_username the username which wants to be the new username
+   *@param changer_username the username of the user doing the "change username" request
+   */
   private void change_username(String old_username, String new_username, String changer_username){
     try{
       String query = "Update users set username = ? where username = ?;";
@@ -477,6 +550,11 @@ public class SQLconnect {
   }
   
   //=============================GETTERS====================================
+  /**Returns a User object via a username
+   *
+   *@param username the username from the user that wants to be returned
+   *@return an User object
+   */
   private User get_user(String username){
     ResultSet rs = null;
 
@@ -509,6 +587,11 @@ public class SQLconnect {
     return result;
   }
   
+  /**Checks if a SKU code exists in the database
+   *
+   *@param SKU_to_compare the SKU code being searched
+   *@return boolean true if the SKU code already exists in the database, false if contrary 
+   */
   private boolean get_amount_SKU(int SKU_to_compare){
     ResultSet rs = null;
 
@@ -531,6 +614,13 @@ public class SQLconnect {
     }
   }
   
+  /**saves a repair request made by an user on a table on the database
+   *
+   *@param repair_code the repair code of the request
+   *@param SKU_code the SKU code of the tool being asked to repair
+   *@param responsible_user the user responsible for the repair request
+   *@return true if the repair request was made succesfully, false if not
+   */ 
   private boolean save_repair_request(float repair_code, int SKU_code, String responsible_user){
     try{
       String query = "Insert into equipment_repair(repair_code, SKU_code, request_submission_date, responsible_user, state) Values (?, ?, curdate(), ?, 0);";
@@ -560,6 +650,11 @@ public class SQLconnect {
     User_reg_request(username);
   }
   //========================checkers=======================================
+  /**Checks if a username exists in the database
+   *
+   *@param username the username to check in the database
+   *@return true if the username exists, false if not
+   */ 
   private boolean check_username(String username){
     ResultSet rs = null;
 
@@ -582,6 +677,11 @@ public class SQLconnect {
     }
   }
 
+  /**Checks if the NIF exists in the database
+   *
+   *@param NIF the nif to be searched
+   *@return true if the NIF exists, false if not
+   */ 
   private boolean check_NIF(int NIF){
     ResultSet rs = null;
     
@@ -635,7 +735,12 @@ public class SQLconnect {
 
     return SKU;
   }
-
+  
+  /**Turns a given String into a Date
+   *
+   *@param date the string version of the date that is to be turned into a Date type
+   *@return a Date type variable
+   */ 
   private Date string_into_Date(String date){
     String day = date.substring(0, 2);
     String month = date.substring(2, 4);
@@ -646,7 +751,12 @@ public class SQLconnect {
     Date manifacture_date = Date.valueOf(date_format);
     return manifacture_date;
   }
-
+  
+  /**Prints the existing equipments belonging to a user via their username
+   *
+   *@param username the username of the owner of the equipments to be searched
+   *@return true if the search was succesfull or false if the searched was empty or error
+   */ 
   private boolean check_equipments(String username){ 
     ResultSet rs = null; 
     boolean found = false;
