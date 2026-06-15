@@ -87,11 +87,13 @@ public class listing{
     }
   }
   
-  /**
+  /**Let's the user to choose a specific type of listing
    *
-   *
-   *
-   */ 
+   *@param db the SQLconnect object thats being used to do the comunication bethween the database and the app 
+   *@param input the Scanner object being used for inputs from the user
+   *@param type the type 
+   *@return 
+   */
   private void list_users_by_class(SQLconnect db, Scanner input, String type){
     if(type.equals("manager")){
       boolean running = true;
@@ -127,10 +129,10 @@ public class listing{
     }
   }
 
-  /**
+  /**Does a listing by the name of the user
    *
-   *
-   *
+   *@param db the SQLconnect object thats being used to do the comunication bethween the database and the app
+   *@param input the Scanner object being used from the user
    */ 
   private void search_man_by_name(SQLconnect db, Scanner input){
     boolean running = true;
@@ -166,11 +168,10 @@ public class listing{
     }
   }
 
-  /**
+  /**Does a listing by the username of the users
    *
-   *
-   *
-   *
+   *@param db the SQLconnect object thats being used to do the comunication bethween the database and the app
+   *@param input the Scanner object being used for the inputs from the user
    */ 
   private void search_man_by_username(SQLconnect db, Scanner input){
     boolean running = true;
@@ -206,11 +207,10 @@ public class listing{
     }
   }
   
-  /**
+  /**Does a listing from the type of the users
    *
-   *
-   *
-   *
+   *@param db the SQLconnect object thats being used to do the comunication bethween the database and the app
+   *@param input the Scanner object being used for inputs from the user
    */ 
   private void search_man_by_type(SQLconnect db, Scanner input){
     boolean running = true;
