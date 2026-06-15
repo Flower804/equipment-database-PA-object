@@ -114,6 +114,10 @@ public class SQLconnect {
     return list_all_users(filter, offset);
   }
 
+  public ArrayList<User> list_users_by_choice(int search_type, String filter, int offset){
+    return list_all(search_type, filter, offset);
+  }
+
  //===============================private methods==========================
   
   //TODO: dont forget to change this before handing in the assignment, so that it 
